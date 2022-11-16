@@ -1,5 +1,7 @@
 # CS-546-B-Final-Project
 
+##*HomeFinder*
+
 Team Members:
 ● Pratiksha Naik
 ● Jahnavi Bevara
