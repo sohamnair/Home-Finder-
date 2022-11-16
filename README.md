@@ -1,6 +1,6 @@
 # CS-546-B-Final-Project
 
-##*HomeFinder*
+#*HomeFinder*
 
 Team Members:
 ● Pratiksha Naik
