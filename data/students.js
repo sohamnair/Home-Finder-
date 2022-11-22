@@ -38,7 +38,7 @@ const createUser = async (
       age:age,
       favourites:[]
     }
-    const insertInfo = await userCollection.insertOne(newUser);
+    const insertInfo = await studentCollection.insertOne(newUser);
       if (!insertInfo.acknowledged || !insertInfo.insertedId){
         throw 'Error : Could not add owner';
       }

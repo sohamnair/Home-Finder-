@@ -39,7 +39,7 @@ const createUser = async (
       age:age,
       properties:[]
     }
-    const insertInfo = await userCollection.insertOne(newUser);
+    const insertInfo = await ownerCollection.insertOne(newUser);
       if (!insertInfo.acknowledged || !insertInfo.insertedId){
         throw 'Error : Could not add owner';
       }

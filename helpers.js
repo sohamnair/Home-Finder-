@@ -120,7 +120,7 @@ function validateProperty(address,description,laundry,rent,listedBy,email,area,b
     if(!((/^[a-zA-Z- ]+$/).test(laundry))){
         throw "Error: Invalid laundry";
     }
-    if(!((/^[a-zA-Z ]$/).test(listedBy))){
+    if(!((/^[a-zA-Z ]+$/).test(listedBy))){
         throw "Error : Invalid lister";
     }
     if(!((/^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/).test(email.trim()))){
