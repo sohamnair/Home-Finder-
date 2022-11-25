@@ -6,7 +6,7 @@ const ownerData = require("./owners");
 
 const createProperty = async (
     address,description,laundry,rent,listedBy,email,area,bed,bath
-  )=> {
+  ) => {
     validate.validateProperty(address,description,laundry,rent,listedBy,email,area,bed,bath);
     
     address=address.trim()
@@ -47,9 +47,8 @@ const createProperty = async (
 
     const newId = insertInfo.insertedId.toString();
 
-    //add property to owners property array
+    //add property to owner's property array
 
-    // const ownerDetails = await ownerData.getOwnerByEmail(email);
     const ownerCollection = await owners();
     const updatedInfo = await ownerCollection.updateOne({
         email: email
@@ -59,18 +58,44 @@ const createProperty = async (
       if (updatedInfo.modifiedCount === 0) {
           throw 'Error : could not add property to owner collection';
       }
-    //
+    
     return newId
 }
 
-const getAllProperties = async()=>{
+const getAllProperties = async () => {
+    const propertyCollection = await properties();
+    const propertyList = await propertyCollection.find({}).toArray();
+    if (!propertyList) throw 'Internal server error, could not get all properties';
+    return propertyList;
+}
+
+const getPropertyById = async (id) => {
+    id = validate.checkId(id);
     const propertyCollection = await properties();
     const propertyList = await propertyCollection.find({}).toArray();
     if (!propertyList) throw 'Error : Could not get all properties';
-    return propertyList;
+    let obj = {};
+    let flag = false;
+    for(let i = 0; i<propertyList.length; i++) {
+        if(propertyList[i]._id.toString() == id) {
+            obj = propertyList[i];
+            flag = true;
+            break;
+        }
+    }
+
+    if(!flag) throw "No property with this ID found";
+
+    return obj;
+}
+
+const createComment = async (id, comment) => {
+    id = validate.checkId(id);
 }
 
 module.exports={
     createProperty,
-    getAllProperties
+    getAllProperties,
+    getPropertyById,
+    createComment
 }

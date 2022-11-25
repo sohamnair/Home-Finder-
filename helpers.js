@@ -128,9 +128,14 @@ function validateProperty(address,description,laundry,rent,listedBy,email,area,b
     }
 }
 
+function checkId(id) {
+    
+}
+
 module.exports={
   validateRegistration,
   validateUser,
   validateProperty,
-  validateEmail
+  validateEmail,
+  checkId
 }

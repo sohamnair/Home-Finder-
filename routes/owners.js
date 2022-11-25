@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const data = require('../data');
+const index = require('../data/index');
 
 // router code goes here
 // 
