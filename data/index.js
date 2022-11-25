@@ -1,9 +1,9 @@
 const owner = require('./owners');
 const student = require('./students');
-const propertie = require('./properties');
-//
+const properties = require('./properties');
+
 module.exports = {
-  owner:owner,
-  student:student,
-  propertie:propertie
+  owner: owner,
+  student: student,
+  properties: properties
 };

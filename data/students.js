@@ -4,11 +4,10 @@ const validate = require("../helpers");
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
-const createUser = async (
-    email,password,firstName,lastName,contact,gender,city,state,age
-  ) => {
-    validate.validateRegistration(email,password,firstName,lastName,contact,gender,city,state,age);
-    email=email.trim().toLowerCase();
+const createUser = async (emailId, password, firstName, lastName, contact, gender, city, state, age) => {
+    validate.validateRegistration(emailId,password,firstName,lastName,contact,gender,city,state,age);
+    emailId=emailId.trim().toLowerCase();
+    password=password.trim();
     firstName=firstName.trim();
     lastName=lastName.trim();
     contact=contact.trim();
@@ -19,15 +18,15 @@ const createUser = async (
     let hash = await bcrypt.hash(password, saltRounds);
     const studentCollection = await students();
     const user = await studentCollection.findOne({
-      email: email
+      emailId: emailId
     });
     if(user!=null){
-      if(user.email.toLowerCase()===email.toLowerCase()){
+      if(user.emailId.toLowerCase()===emailId.toLowerCase()){
         throw "user with that email already exists";
       }
     }
     let newUser={
-      email:email,
+      emailId:emailId,
       hashedPassword:hash,
       firstName:firstName,
       lastName:lastName,
@@ -45,13 +44,14 @@ const createUser = async (
     return newUser;
   };
 
-  const checkUser = async (email, password) => {
+  const checkUser = async (emailId, password) => {
 
     validate.validateUser(email,password);
-    email=email.trim().toLowerCase();
+    emailId=emailId.trim().toLowerCase();
+    password=password.trim();
     const studentCollection = await students();
     const user = await studentCollection.findOne({
-      email: email
+      emailId: emailId
     });
     if(user===null){
       throw "Either the email or password is invalid";
@@ -71,10 +71,26 @@ const getAllStudent = async () => {
     return studentList;
 };
 
-module.exports={
+const getStudentByEmail = async (emailId) => {
+  validate.validateEmail(email);
+  emailId=emailId.trim().toLowerCase();
+  const studentCollection = await students();
+  const student = await studentCollection.findOne({
+    emailId: emailId
+  });
+  return student;
+}
+
+const updateStudentDetails = async (emailId, password, firstName, lastName, contact, gender, city, state, age) => {
+  // we are using emailid to uniquely identify a user to use that while updating user data
+}
+
+module.exports = {
     checkUser,
     createUser,
-    getAllStudent
+    getAllStudent,
+    getStudentByEmail,
+    updateStudentDetails
 }
 
 

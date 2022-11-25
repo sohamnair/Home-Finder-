@@ -1,4 +1,6 @@
-function validateRegistration(email,password,firstName,lastName,contact,gender,city,state,age){
+const { ObjectId } = require("mongodb");
+
+function validateRegistration(email,password,firstName,lastName,contact,gender,city,state,age) {
     if(!email || !password||!firstName){
       throw "Input not provided";
     }
@@ -37,7 +39,7 @@ function validateRegistration(email,password,firstName,lastName,contact,gender,c
     }
 }
 
-function validateUser(email,password){
+function validateUser(email,password) {
     if(!email || !password){
         throw "Input not provided";
     }
@@ -55,7 +57,7 @@ function validateUser(email,password){
     }
 }
 
-function validateEmail(email){
+function validateEmail(email) {
     if(!email){
         throw "Input not provided";
     }
@@ -70,7 +72,7 @@ function validateEmail(email){
     }
 }
 
-function validateProperty(address,description,laundry,rent,listedBy,email,area,bed,bath){
+function validateProperty(address,description,laundry,rent,listedBy,email,area,bed,bath) {
     if(!address||!description||!laundry||!rent||!listedBy||!email||!area||!bed||!bath){
         throw "Error: Input missing";
     }
@@ -128,9 +130,34 @@ function validateProperty(address,description,laundry,rent,listedBy,email,area,b
     }
 }
 
-module.exports={
-  validateRegistration,
-  validateUser,
-  validateProperty,
-  validateEmail
+function checkId(id) {
+    id = id.trim();
+    if (!ObjectId.isValid(id)) throw 'Invalid object ID';
+    if (!id) throw 'Please provide an ID';
+    if(typeof id !== 'string') throw "ID is not a string";
+    if(id.length == 0) throw "ID length invalid";
+
+    return id.trim();
+}
+
+function checkComment(comment) {
+    if(!comment){
+        throw "Input not provided";
+    }
+    if(typeof comment !== 'string'){
+        throw "Input must be string";
+    }
+    if(comment.trim().length == 0){
+        throw "Input cannot be Empty spaces";
+    }
+    return comment.trim();
+}
+
+module.exports = {
+    validateRegistration,
+    validateUser,
+    validateProperty,
+    validateEmail,
+    checkId,
+    checkComment
 }
