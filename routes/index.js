@@ -12,7 +12,9 @@ const constructorMethod = (app) => {
   app.use('/properties', propertieRoute);
 
   app.use('*', (req, res) => {
+
     return res.status(404).render('./error_page', {title: "Error", error: "Oops! the page you are searching doesn't exist"});
+
   });
 };
 

@@ -10,7 +10,7 @@ function validateRegistration(email,password,firstName,lastName,contact,gender,c
     if(email.trim().length==0 || password.trim().length==0|| firstName.trim().length==0|| lastName.trim().length==0|| contact.trim().length==0|| gender.trim().length==0|| city.trim().length==0|| state.trim().length==0|| age.trim().length==0){
       throw "Input cannot be Empty spaces";
     }
-    if(!((/^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/).test(email.trim()))){
+    if(!((/^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/).test(email.trim()))){
       throw "Invalid email";
     }
     if(!((/^(?=.*[0-9])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.* ).{6,}$/).test(password))){
@@ -49,7 +49,7 @@ function validateUser(email,password) {
     if(email.trim().length==0 || password.trim().length==0){
         throw "Input cannot be Empty spaces";
     }
-    if(!((/^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/).test(email.trim()))){
+    if(!((/^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/).test(email.trim()))){
         throw "Invalid email";
     }
     if(!((/^(?=.*[0-9])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.* ).{6,}$/).test(password))){
@@ -67,7 +67,7 @@ function validateEmail(email) {
     if(email.trim().length==0){
         throw "Input cannot be Empty spaces";
     }
-    if(!((/^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/).test(email.trim()))){
+    if(!((/^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/).test(email.trim()))){
         throw "Invalid email";
     }
 }
@@ -131,6 +131,7 @@ function validateProperty(address,description,laundry,rent,listedBy,email,area,b
 }
 
 function checkId(id) {
+
     id = id.trim();
     if (!ObjectId.isValid(id)) throw 'Invalid object ID';
     if (!id) throw 'Please provide an ID';
@@ -161,3 +162,4 @@ module.exports = {
     checkId,
     checkComment
 }
+

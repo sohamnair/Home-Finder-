@@ -6,8 +6,11 @@ const ownerData = require("./owners");
 const { ObjectId } = require("mongodb");
 
 
+
 const createProperty = async (address, description, laundry, rent, listedBy, emailId, area, bed, bath) => {
     validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
+
+
     
     address=address.trim()
     description=description.trim()
@@ -50,6 +53,7 @@ const createProperty = async (address, description, laundry, rent, listedBy, ema
     //add property to owner's property array
 
     const ownerCollection = await owners();
+
     const updatedInfo = await ownerCollection.updateOne(
         {emailId: emailId},
         {$addToSet: {properties:newId}}
@@ -58,6 +62,8 @@ const createProperty = async (address, description, laundry, rent, listedBy, ema
     if (updatedInfo.modifiedCount === 0) {
         throw 'Error : could not add property to owner collection';
     }
+
+
     
     return newId
 }
@@ -69,6 +75,7 @@ const getAllProperties = async () => {
     return propertyList;
 }
 
+
 const getAllPropertiesByUser = async (idArray) => {
     const propertyCollection = await properties();
     const propertyList = await propertyCollection.find({}).toArray();
@@ -79,6 +86,7 @@ const getAllPropertiesByUser = async (idArray) => {
     }
     return ansList;
 }
+
 
 const getPropertyById = async (id) => {
     id = validate.checkId(id);
@@ -102,6 +110,7 @@ const getPropertyById = async (id) => {
 
 const createComment = async (id, comment) => {
     id = validate.checkId(id);
+
     comment = validate.checkComment(comment);
     const propertyCollection = await properties();
     let newUpdate = {
@@ -118,10 +127,11 @@ const createComment = async (id, comment) => {
     }
 }
 
-module.exports = {
+
+module.exports={
     createProperty,
     getAllProperties,
-    getAllPropertiesByUser,
     getPropertyById,
+    getAllPropertiesByUser,
     createComment
 }

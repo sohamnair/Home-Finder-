@@ -47,7 +47,7 @@ const createUser = async (emailId, password, firstName, lastName, contact, gende
 
 const checkUser = async (emailId, password) => {
 
-    validate.validateUser(email,password);
+    validate.validateUser(emailId,password);
     emailId=emailId.trim().toLowerCase();
     password=password.trim();
     const ownerCollection = await owners();
@@ -72,8 +72,8 @@ const getAllOwners = async () => {
     return ownerList;
 };
 
-const getOwnerByEmail = async (email) => {
-    validate.validateEmail(email);
+const getOwnerByEmail = async (emailId) => {
+    validate.validateEmail(emailId);
     emailId=emailId.trim().toLowerCase();
     const ownerCollection = await owners();
     const owner = await ownerCollection.findOne({
