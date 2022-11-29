@@ -8,16 +8,28 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "express": "^4.18.2",
     "express-handlebars": "^6.0.6",
     "express-session": "^1.17.3",
+
+    "handlebars": "^4.7.3",
+
     "mongodb": "^4.11.0",
     "session": "^0.1.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
   },
-  "description": ""
+  "description": "*HomeFinder*",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pratikshanaik12/CS-546-B-Final-Project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pratikshanaik12/CS-546-B-Final-Project/issues"
+  },
+  "homepage": "https://github.com/pratikshanaik12/CS-546-B-Final-Project#readme"
 }

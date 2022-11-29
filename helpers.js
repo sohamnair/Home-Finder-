@@ -131,6 +131,7 @@ function validateProperty(address,description,laundry,rent,listedBy,email,area,b
 }
 
 function checkId(id) {
+
     id = id.trim();
     if (!ObjectId.isValid(id)) throw 'Invalid object ID';
     if (!id) throw 'Please provide an ID';
@@ -161,3 +162,4 @@ module.exports = {
     checkId,
     checkComment
 }
+
