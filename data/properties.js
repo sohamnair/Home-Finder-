@@ -3,18 +3,21 @@ const properties = mongoCollections.properties;
 const owners = mongoCollections.owners;
 const validate = require("../helpers");
 const ownerData = require("./owners");
+const { ObjectId } = require("mongodb");
 
-const createProperty = async (
-    address,description,laundry,rent,listedBy,email,area,bed,bath
-  ) => {
-    validate.validateProperty(address,description,laundry,rent,listedBy,email,area,bed,bath);
+
+
+const createProperty = async (address, description, laundry, rent, listedBy, emailId, area, bed, bath) => {
+    validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
+
+
     
     address=address.trim()
     description=description.trim()
     laundry=laundry.trim()
     rent=rent.trim()
     listedBy=listedBy.trim()
-    email=email.trim()
+    emailId=emailId.trim()
     area=area.trim()
     bed=bed.trim()
     bath=bath.trim()
@@ -25,7 +28,7 @@ const createProperty = async (
     bath=Number(bath);
 
     let current = new Date();
-    let dateListed = current.getMonth()+1+"/"+current.getDate()+"/"+current.getFullYear();
+    let dateListed = (current.getMonth()+1)+"/"+current.getDate()+"/"+current.getFullYear();
 
     const newProperty={
         address:address,
@@ -34,7 +37,7 @@ const createProperty = async (
         dateListed:dateListed,
         rent:rent,
         listedBy:listedBy,
-        email:email,
+        emailId:emailId,
         area:area,
         bed:bed,
         bath:bath,
@@ -50,14 +53,17 @@ const createProperty = async (
     //add property to owner's property array
 
     const ownerCollection = await owners();
-    const updatedInfo = await ownerCollection.updateOne({
-        email: email
-      }, {
-          $addToSet: {properties:newId}
-      });
-      if (updatedInfo.modifiedCount === 0) {
-          throw 'Error : could not add property to owner collection';
-      }
+
+    const updatedInfo = await ownerCollection.updateOne(
+        {emailId: emailId},
+        {$addToSet: {properties:newId}}
+    );
+
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'Error : could not add property to owner collection';
+    }
+
+
     
     return newId
 }
@@ -68,6 +74,19 @@ const getAllProperties = async () => {
     if (!propertyList) throw 'Internal server error, could not get all properties';
     return propertyList;
 }
+
+
+const getAllPropertiesByUser = async (idArray) => {
+    const propertyCollection = await properties();
+    const propertyList = await propertyCollection.find({}).toArray();
+    if (!propertyList) throw 'Internal server error, could not get all properties';
+    let ansList = [];
+    for(let i = 0; i<propertyList.length; i++) {
+        if(idArray.includes(propertyList[i]._id.toString())) ansList.push(propertyList[i]);
+    }
+    return ansList;
+}
+
 
 const getPropertyById = async (id) => {
     id = validate.checkId(id);
@@ -91,11 +110,28 @@ const getPropertyById = async (id) => {
 
 const createComment = async (id, comment) => {
     id = validate.checkId(id);
+
+    comment = validate.checkComment(comment);
+    const propertyCollection = await properties();
+    let newUpdate = {
+        _id: new ObjectId(),
+        comment
+    }
+    const updatedInfo = await propertyCollection.updateOne(
+        {_id: ObjectId(id)},
+        {$addToSet: {comments: newUpdate}}
+    );
+
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'Error : could not add property to owner collection';
+    }
 }
+
 
 module.exports={
     createProperty,
     getAllProperties,
     getPropertyById,
+    getAllPropertiesByUser,
     createComment
 }

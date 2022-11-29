@@ -10,10 +10,13 @@ router.route('/')
         } 
         else {
             let data = await index.properties.getAllProperties();
-            return res.render('./properties', {title: "All Properties", data: data});
+
+            return res.render('./properties_page', {title: "All Properties", data: data});
         }
     }catch(e) {
-        return res.status(500).render('./error', {title: "Error", error: e});
+        return res.status(500).render('./error_page', {title: "Error", error: e});
+
+            
     }
 })
 
@@ -26,10 +29,12 @@ router.route('/:id')
         else {
             let id = req.params.id;
             let data = await index.properties.getPropertyById(id);
-            return res.render('./property', {title: "Property", data: data});
+
+            return res.render('./property_page', {title: "Property", data: data});
         }
     }catch(e) {
-        return res.status(404).render('./error', {title: "Error", error: e});
+        return res.status(404).render('./error_page', {title: "Error", error: e});
+
     }
 })
 
@@ -41,11 +46,14 @@ router.route('/:id/comments')
         } 
         else {
             let id = req.params.id;
-            let data = await index.properties.getPropertyById(id);
-            return res.render('./property', {title: "Property", data: data});
+
+            let comment = req.body.comment;
+            let data = await index.properties.createComment(id, comment);
+            res.redirect(`/properties/${id}`);
         }
     }catch(e) {
-        return res.status(404).render('./error', {title: "Error", error: e});
+        return res.status(404).render('./error_page', {title: "Error", error: e});
+
     }
 })
 

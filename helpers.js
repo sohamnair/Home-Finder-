@@ -1,4 +1,6 @@
-function validateRegistration(email,password,firstName,lastName,contact,gender,city,state,age){
+const { ObjectId } = require("mongodb");
+
+function validateRegistration(email,password,firstName,lastName,contact,gender,city,state,age) {
     if(!email || !password||!firstName){
       throw "Input not provided";
     }
@@ -8,7 +10,7 @@ function validateRegistration(email,password,firstName,lastName,contact,gender,c
     if(email.trim().length==0 || password.trim().length==0|| firstName.trim().length==0|| lastName.trim().length==0|| contact.trim().length==0|| gender.trim().length==0|| city.trim().length==0|| state.trim().length==0|| age.trim().length==0){
       throw "Input cannot be Empty spaces";
     }
-    if(!((/^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/).test(email.trim()))){
+    if(!((/^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/).test(email.trim()))){
       throw "Invalid email";
     }
     if(!((/^(?=.*[0-9])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.* ).{6,}$/).test(password))){
@@ -37,7 +39,7 @@ function validateRegistration(email,password,firstName,lastName,contact,gender,c
     }
 }
 
-function validateUser(email,password){
+function validateUser(email,password) {
     if(!email || !password){
         throw "Input not provided";
     }
@@ -47,7 +49,7 @@ function validateUser(email,password){
     if(email.trim().length==0 || password.trim().length==0){
         throw "Input cannot be Empty spaces";
     }
-    if(!((/^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/).test(email.trim()))){
+    if(!((/^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/).test(email.trim()))){
         throw "Invalid email";
     }
     if(!((/^(?=.*[0-9])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.* ).{6,}$/).test(password))){
@@ -55,7 +57,7 @@ function validateUser(email,password){
     }
 }
 
-function validateEmail(email){
+function validateEmail(email) {
     if(!email){
         throw "Input not provided";
     }
@@ -65,12 +67,12 @@ function validateEmail(email){
     if(email.trim().length==0){
         throw "Input cannot be Empty spaces";
     }
-    if(!((/^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/).test(email.trim()))){
+    if(!((/^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/).test(email.trim()))){
         throw "Invalid email";
     }
 }
 
-function validateProperty(address,description,laundry,rent,listedBy,email,area,bed,bath){
+function validateProperty(address,description,laundry,rent,listedBy,email,area,bed,bath) {
     if(!address||!description||!laundry||!rent||!listedBy||!email||!area||!bed||!bath){
         throw "Error: Input missing";
     }
@@ -129,13 +131,35 @@ function validateProperty(address,description,laundry,rent,listedBy,email,area,b
 }
 
 function checkId(id) {
-    
+
+    id = id.trim();
+    if (!ObjectId.isValid(id)) throw 'Invalid object ID';
+    if (!id) throw 'Please provide an ID';
+    if(typeof id !== 'string') throw "ID is not a string";
+    if(id.length == 0) throw "ID length invalid";
+
+    return id.trim();
 }
 
-module.exports={
-  validateRegistration,
-  validateUser,
-  validateProperty,
-  validateEmail,
-  checkId
+function checkComment(comment) {
+    if(!comment){
+        throw "Input not provided";
+    }
+    if(typeof comment !== 'string'){
+        throw "Input must be string";
+    }
+    if(comment.trim().length == 0){
+        throw "Input cannot be Empty spaces";
+    }
+    return comment.trim();
 }
+
+module.exports = {
+    validateRegistration,
+    validateUser,
+    validateProperty,
+    validateEmail,
+    checkId,
+    checkComment
+}
+

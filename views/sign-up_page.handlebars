@@ -1,3 +1,4 @@
+
 <main>
   <form method="POST" id="signup-form" action="/sign-up">
     <label for="emailIdInput">
@@ -56,17 +57,18 @@
     </label>
 
     
-    <input type="radio" id = "student" name = "userType" value="student" checked>
-    <label for="student"> Student</label>
+    <input type="radio" id = "userType" name = "userType" value="student">
+    <label for="userType"> Student</label>
     <br>
     <br>
-    <input type="radio" id = "owner" name = "userType" value="owner">
-    <label for="owner"> Owner</label>
+    <input type="radio" id = "userType" name = "userType" value="owner">
+    <label for="userType"> Owner</label>
     <br>
     <br>
 
     <input type="submit"  value="Sign-Up">
   </form>
 
-  {{!-- <a href="/sign-up">Click here to Sign Up!</a> --}}
+  <a href="/sign-in">Already have an account? Click here to Sign In!</a>
+
 </main> 
