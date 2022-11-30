@@ -77,7 +77,7 @@ const getAllOwners = async () => {
 
 const getOwnerByEmail = async (emailId) => {
     validate.validateEmail(emailId);
-    let emailId=email.trim().toLowerCase();
+    emailId=email.trim().toLowerCase();
     const ownerCollection = await owners();
     const owner = await ownerCollection.findOne({
       emailId: emailId
@@ -202,6 +202,7 @@ const editProp = async (id, address, description, laundry, rent, listedBy, email
       return await propertyData.getPropertyById(id);
     }
   }
+}
 
   const removeProperty = async (id) => {
     validate.checkId(id);
@@ -213,7 +214,6 @@ const editProp = async (id, address, description, laundry, rent, listedBy, email
     }
   }
 
-}
 
 module.exports = {
     checkUser,
