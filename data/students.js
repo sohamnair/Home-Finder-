@@ -46,7 +46,7 @@ const createUser = async (emailId, password, firstName, lastName, contact, gende
 
   const checkUser = async (emailId, password) => {
 
-    validate.validateUser(email,password);
+    validate.validateUser(emailId,password);
     emailId=emailId.trim().toLowerCase();
     password=password.trim();
     const studentCollection = await students();
@@ -72,7 +72,7 @@ const getAllStudent = async () => {
 };
 
 const getStudentByEmail = async (emailId) => {
-  validate.validateEmail(email);
+  validate.validateEmail(emailId);
   emailId=emailId.trim().toLowerCase();
   const studentCollection = await students();
   const student = await studentCollection.findOne({
