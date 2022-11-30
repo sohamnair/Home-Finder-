@@ -64,8 +64,8 @@ router.route('/:id/comments')
     }
 })
 
-router.route('/createProperty')
-.get(async (req,res)=>{
+router.route('/openCreatePropetyPage')
+.post(async (req,res)=>{
     try {
         if (!req.session.user) {
             res.redirect('/sign-in');
@@ -77,6 +77,8 @@ router.route('/createProperty')
         
     }
 })
+
+router.route('/createProperty')
 .post(upload.array('images'),async (req, res) => {
     try {
         if (!req.session.user) {

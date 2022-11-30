@@ -5,6 +5,7 @@ const validate = require("../helpers");
 const ownerData = require("./owners");
 const { ObjectId } = require("mongodb");
 const cloudinary = require('../config/cloudinary');
+require("dotenv/config");
 
 
 
@@ -65,7 +66,7 @@ const createProperty = async (images,address, description, laundry, rent, listed
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
         throw 'Error : Could not add property';
 
-    const newId = insertInfo.insertedId.toString();
+    let newId = insertInfo.insertedId.toString();
 
     //add property to owner's property array
 
@@ -79,8 +80,6 @@ const createProperty = async (images,address, description, laundry, rent, listed
     if (updatedInfo.modifiedCount === 0) {
         throw 'Error : could not add property to owner collection';
     }
-
-
     
     return newId
 }

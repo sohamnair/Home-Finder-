@@ -6,6 +6,7 @@ const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
 const session = require('express-session')
 const cookieParser = require('cookie-parser');
+require("dotenv/config");
 
 app.use(cookieParser());
 app.use(
