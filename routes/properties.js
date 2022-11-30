@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const index = require('../data/index');
+const validate =require('../helpers');
+const multer = require('multer');
+const upload = multer({});
+require("dotenv/config");
 
 router.route('/')
 .get(async (req, res) => {
@@ -28,6 +32,7 @@ router.route('/:id')
         } 
         else {
             let id = req.params.id;
+            validate.checkId(id);
             let data = await index.properties.getPropertyById(id);
 
             return res.render('./property_page', {title: "Property", data: data});
@@ -48,12 +53,62 @@ router.route('/:id/comments')
             let id = req.params.id;
 
             let comment = req.body.comment;
+            validate.checkId(id);
+            validate.checkComment(comment);
             let data = await index.properties.createComment(id, comment);
             res.redirect(`/properties/${id}`);
         }
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});
 
+    }
+})
+
+router.route('/createProperty')
+.get(async (req,res)=>{
+    try {
+        if (!req.session.user) {
+            res.redirect('/sign-in');
+        } 
+        else {
+            return res.render('./createProperty', {title: "Add Property"});
+        }
+    } catch (e) {
+        
+    }
+})
+.post(upload.array('images'),async (req, res) => {
+    try {
+        if (!req.session.user) {
+            res.redirect('/sign-in');
+        } 
+        else {
+            let imageBuffer=[];
+            for(let i=0;i<req.files.length;i++){
+                let mime = req.files[i].mimetype;
+                if(!((/^image\/(png|jpeg|jpg|tif|pjp|apng|xbm|jxl|svgz|ico|tiff|gif|svg|jfif|webp|bmp|pjpeg|avif)$/).test(mime))){
+                    throw "Error: Selected image is not a right image type";
+                }
+                let base = req.files[i].buffer.toString('base64');
+                let url = "data:"+mime+";base64,"+base;
+                imageBuffer.push(url);
+            };
+            let address = req.body.address;
+            let description = req.body.description;
+            let laundry = req.body.laundry;
+            let rent = req.body.rent;
+            let listedBy = req.session.user.firstName;
+            let emailId = req.session.user.emailId;
+            let area = req.body.area;
+            let bed = req.body.bed;
+            let bath= req.body.bath;
+            
+            validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
+            const result = await index.properties.createProperty(imageBuffer,address,description,laundry,rent,listedBy,emailId,area,bed,bath);
+            res.redirect('/');
+        }
+    }catch(e) {
+        return res.status(404).render('./error_page', {title: "Error", error: e});
     }
 })
 

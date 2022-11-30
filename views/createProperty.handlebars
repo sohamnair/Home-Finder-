@@ -1,0 +1,74 @@
+<main>
+  <form method="POST" id="createPropertyForm" action="/properties/createProperty" enctype="multipart/form-data">
+    <label for="images">
+        Images:
+        <input type="file" accept="image/*" id="images" name="images" placeholder="upload images" multiple>
+        <br>
+        <br>
+    </label>
+    <label for="address">
+        Address:
+        <input type="text" id="address" name="address" placeholder="Enter address here">
+        <br>
+        <br>
+    </label>
+    <label for="descripton">
+        Description:
+        <textarea id="description" cols="40" rows="5" name="description" placeholder="Enter description">
+        </textarea>
+        <br>
+        <br>
+    </label>
+    <label for="laundry">
+        Laundry:
+        <select id="laundry" name="laundry" placeholder="choose laundry details">
+            <option value="Not-Included">Not-Included</option>
+            <option value="In-Unit">In-Unit</option>
+            <option value="Community">Community</option>
+        </select>
+        <br>
+        <br>
+    </label>
+    <label for="rent">
+        Rent:
+        <input type="number" id="rent" name="rent" placeholder="Enter Property rent">
+        <br>
+        <br>
+    </label>
+    <label for = "area">
+        Area:
+        <input type="number" id = "area" name = "area" placeholder="Enter property area">
+        <br>
+        <br>
+    </label>
+    <label for = "bed">
+        Bed:
+        <select id = "bed" name = "bed" placeholder="select bedrooms">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+        </select>
+        <br>
+        <br>
+    </label>
+    <label for = "bath">
+        Bath:
+        <select id = "bath" name = "bath" placeholder="select bathrooms">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+        </select>
+        <br>
+        <br>
+    </label>
+    <br>
+
+    <input type="submit"  value="Create">
+  </form>
+</main> 

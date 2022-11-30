@@ -4,13 +4,29 @@ const owners = mongoCollections.owners;
 const validate = require("../helpers");
 const ownerData = require("./owners");
 const { ObjectId } = require("mongodb");
+const cloudinary = require('../config/cloudinary');
 
 
 
-const createProperty = async (address, description, laundry, rent, listedBy, emailId, area, bed, bath) => {
+const createProperty = async (images,address, description, laundry, rent, listedBy, emailId, area, bed, bath) => {
     validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
 
-
+    //covert base64 encoded image to respective URL, these URL can be used to display images
+    let imageBuffer=[];
+    let result;
+    for(let i=0;i<images.length;i++){
+        result = await cloudinary.uploader.upload(images[i],{
+            //uploaded images are stored in sanjan's cloudinary account under uploads folder
+            folder: "uploads",
+            //width and crop to alter image size, not needed right now, will uncomment if needed in future
+            // width:300,
+            // crop:"scale"
+        });
+        imageBuffer.push({
+            _id: new ObjectId(),
+            url: result.secure_url
+        })
+    };
     
     address=address.trim()
     description=description.trim()
@@ -31,6 +47,7 @@ const createProperty = async (address, description, laundry, rent, listedBy, ema
     let dateListed = (current.getMonth()+1)+"/"+current.getDate()+"/"+current.getFullYear();
 
     const newProperty={
+        images:imageBuffer,
         address:address,
         description:description,
         laundry:laundry,
@@ -53,7 +70,7 @@ const createProperty = async (address, description, laundry, rent, listedBy, ema
     //add property to owner's property array
 
     const ownerCollection = await owners();
-
+    newId = ObjectId(newId);
     const updatedInfo = await ownerCollection.updateOne(
         {emailId: emailId},
         {$addToSet: {properties:newId}}
