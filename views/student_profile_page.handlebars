@@ -2,3 +2,25 @@
     Use form to display the data and so user can easily edit and submit the form. Call the route (/students)
     Keep the layout similar to sign-up page
  --}}
+
+
+<article class="student_profile">
+    <dl>
+        <dt>Email:</dt><dd>{{data.email}}</dd>
+        <dt>Password:</dt><dd>{{data.password}}</dd> {{!--Should password be displayed here? --}}
+        <dt>First Name</dt>
+        <dd>{{data.firstName}}</dd>
+        <dt>Last Name</dt>
+        <dd>{{data.lastName}}</dd>
+        <dt>Contact</dt>
+        <dd>{{data.contact}}</dd>
+        <dt>Gender</dt>
+        <dd>{{data.gender}}</dd>
+        <dt>City</dt>
+        <dd>{{data.city}}</dd>
+        <dt>State</dt>
+        <dd>{{data.state}}</dd>
+        <dt>Age</dt>
+        <dd>{{data.age}}</dd>
+    </dl>
+</article>

@@ -5,3 +5,21 @@
     My properties or My favourites will call route /owners/properties-list or /students/favourites-list respectively
     On individual property click it will call route /properties/{{id}}
  --}}
+
+ <div class="properties">
+   {{!-- <h1>{{}}</h1>  display appr heading here--}}
+    <ul>
+        {{#each data}}
+        <li><a href="/properties/{{id}}">
+            Address: {{data.address}} </a> </li>
+        <li>Description: {{data.description}}</li>
+        <li>Laundry: {{data.laundry}}</li>
+        <li>Rent: {{data.rent}} </li>
+        <li>Email: {{data.emailid}} </li>
+        <li>Area: {{data.area}} </li>
+        <li>Bed:{{data.bed}} </li>
+        <li>Bath: {{data.bath}} </li>
+        {{/each}}
+    </ul>
+</div>
+<script src="../data/extra.js"></script> {{!--  <{{!}}/script>  (if closing script tag doesnt work)--}}
