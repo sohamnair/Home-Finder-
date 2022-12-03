@@ -97,6 +97,11 @@ const getAllPropertiesByUser = async (idArray) => {
     const propertyList = await propertyCollection.find({}).toArray();
     if (!propertyList) throw 'Internal server error, could not get all properties';
     let ansList = [];
+    
+    for(let i = 0; i<idArray.length; i++) {
+        idArray[i] = idArray[i].toString();
+    }
+
     for(let i = 0; i<propertyList.length; i++) {
         if(idArray.includes(propertyList[i]._id.toString())) ansList.push(propertyList[i]);
     }
@@ -124,6 +129,16 @@ const getPropertyById = async (id) => {
     return obj;
 }
 
+const removeProperty = async (id) => {
+    validate.checkId(id);
+    const propertyCollection = await properties();
+    const deletionInfo = await propertyCollection.deleteOne({_id: ObjectID(id)});
+
+    if (deletionInfo.deletedCount === 0) {
+      throw `Could not delete property with id of ${id}`;
+    }
+  }
+
 const createComment = async (id, comment) => {
     id = validate.checkId(id);
 
@@ -149,5 +164,6 @@ module.exports={
     getAllProperties,
     getPropertyById,
     getAllPropertiesByUser,
-    createComment
+    createComment,
+    removeProperty
 }

@@ -4,7 +4,17 @@
  --}}
 
  <main>
-  <form method="GET" id="owner-profile" action="/owners">
+
+     <div class="ownerLinks">  
+        <a href="/owners/properties-list" id="ownerElement2">My favourites</a>
+        <a href="/sign-out">Sign-out</a>
+        <br>
+        <br>
+    </div>
+
+    <p>{{msg}}</p>
+
+  <form method="POST" id="owner-profile" action="/owners">
     <label for="firstName">
         First Name:
         <input type="text" id="firstName" name="firstName" value={{data.firstName}}>
@@ -44,6 +54,12 @@
     <label for = "state">
         State:
         <input type="text" id = "state" name = "state" value={{data.state}}>
+        <br>
+        <br>
+    </label>
+    <label for = "age">
+        Age:
+        <input type="number" id = "age" name = "age" value={{data.age}}>
         <br>
         <br>
     </label>

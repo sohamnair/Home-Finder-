@@ -13,7 +13,7 @@ router.route('/')
             res.redirect('/properties');
         }
         else{
-            res.render('owner_properties_list_page',{title:'owner props'});
+            res.redirect('/owners/properties-list');
         }
     }
 
@@ -30,7 +30,7 @@ router.route('/sign-in')
             res.redirect('/properties');
         }
         else{
-            res.render('owner_properties_list_page',{title:'owner props'});
+            res.redirect('/owners/properties-list');
         }
     }
 
@@ -55,7 +55,7 @@ router.route('/sign-in')
         res.redirect('/properties');
         }
         else{
-        res.render('owner_properties_list_page',{title:'owner props'});
+            res.redirect('/owners/properties-list');
         }
     }catch(e) {
         res.status(404).render('./sign-in_page', {title: "Sign-in Page", error: e})
@@ -72,7 +72,7 @@ router.route('/sign-up')
             res.redirect('/properties');
         }
         else{
-            res.render('owner_properties_list_page',{title:'owner props'});
+            res.redirect('/owners/properties-list');
         } 
     }
 
@@ -98,5 +98,13 @@ router.route('/sign-up')
         res.status(404).render('./sign-up_page', {title: "Sign-up Form", error: e})
     }
 })
+
+router.route('/sign-out')
+.get(async (req, res) => {
+    req.session.destroy();
+    res.clearCookie('AuthCookie');
+    return res.render('./logout_page', {title: "Logout Successful"});
+})
+
 
 module.exports = router;

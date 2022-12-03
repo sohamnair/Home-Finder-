@@ -14,17 +14,14 @@ router.route('/')
         } 
         else {
             let data = await index.properties.getAllProperties();
-
-            return res.render('./properties_page', {title: "All Properties", data: data});
+            res.render('./properties_page', {title: "All Properties", data: data, style: "/public/properties_page_style.css"});
         }
     }catch(e) {
         return res.status(500).render('./error_page', {title: "Error", error: e});
-
-            
     }
 })
 
-router.route('/:id')
+router.route('/property/:id')
 .get(async (req, res) => {
     try {
         if (!req.session.user) {
@@ -38,12 +35,12 @@ router.route('/:id')
             return res.render('./property_page', {title: "Property", data: data});
         }
     }catch(e) {
-        return res.status(404).render('./error_page', {title: "Error", error: e});
+        return res.status(404).render('./error_page', {title: "Error", error: e, style: "/public/property_page_style.css"});
 
     }
 })
 
-router.route('/:id/comments')
+router.route('/property/:id/comments')
 .post(async (req, res) => {
     try {
         if (!req.session.user) {
@@ -55,8 +52,8 @@ router.route('/:id/comments')
             let comment = req.body.comment;
             validate.checkId(id);
             validate.checkComment(comment);
-            let data = await index.properties.createComment(id, comment);
-            res.redirect(`/properties/${id}`);
+            await index.properties.createComment(id, comment);
+            res.redirect(`/properties/property/${id}`);
         }
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});
@@ -64,21 +61,15 @@ router.route('/:id/comments')
     }
 })
 
-router.route('/openCreatePropetyPage')
-.post(async (req,res)=>{
-    try {
-        if (!req.session.user) {
-            res.redirect('/sign-in');
-        } 
-        else {
-            return res.render('./createProperty', {title: "Add Property"});
-        }
-    } catch (e) {
-        
+router.route('/createProperty')
+.get(async (req,res)=>{
+    if (!req.session.user) {
+        res.redirect('/sign-in');
+    } 
+    else {
+        return res.render('./createProperty', {title: "Add Property"});
     }
 })
-
-router.route('/createProperty')
 .post(upload.array('images'),async (req, res) => {
     try {
         if (!req.session.user) {
