@@ -4,10 +4,30 @@ const owners = mongoCollections.owners;
 const validate = require("../helpers");
 const ownerData = require("./owners");
 const { ObjectId } = require("mongodb");
+const cloudinary = require('../config/cloudinary');
+require("dotenv/config");
 
 
-const createProperty = async (address, description, laundry, rent, listedBy, emailId, area, bed, bath) => {
+
+const createProperty = async (images,address, description, laundry, rent, listedBy, emailId, area, bed, bath) => {
     validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
+
+    //covert base64 encoded image to respective URL, these URL can be used to display images
+    let imageBuffer=[];
+    let result;
+    for(let i=0;i<images.length;i++){
+        result = await cloudinary.uploader.upload(images[i],{
+            //uploaded images are stored in sanjan's cloudinary account under uploads folder
+            folder: "uploads",
+            //width and crop to alter image size, not needed right now, will uncomment if needed in future
+            // width:300,
+            // crop:"scale"
+        });
+        imageBuffer.push({
+            _id: new ObjectId(),
+            url: result.secure_url
+        })
+    };
     
     address=address.trim()
     description=description.trim()
@@ -28,6 +48,7 @@ const createProperty = async (address, description, laundry, rent, listedBy, ema
     let dateListed = (current.getMonth()+1)+"/"+current.getDate()+"/"+current.getFullYear();
 
     const newProperty={
+        images:imageBuffer,
         address:address,
         description:description,
         laundry:laundry,
@@ -45,11 +66,12 @@ const createProperty = async (address, description, laundry, rent, listedBy, ema
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
         throw 'Error : Could not add property';
 
-    const newId = insertInfo.insertedId.toString();
+    let newId = insertInfo.insertedId.toString();
 
     //add property to owner's property array
 
     const ownerCollection = await owners();
+    newId = ObjectId(newId);
     const updatedInfo = await ownerCollection.updateOne(
         {emailId: emailId},
         {$addToSet: {properties:newId}}
@@ -69,16 +91,23 @@ const getAllProperties = async () => {
     return propertyList;
 }
 
+
 const getAllPropertiesByUser = async (idArray) => {
     const propertyCollection = await properties();
     const propertyList = await propertyCollection.find({}).toArray();
     if (!propertyList) throw 'Internal server error, could not get all properties';
     let ansList = [];
+    
+    for(let i = 0; i<idArray.length; i++) {
+        idArray[i] = idArray[i].toString();
+    }
+
     for(let i = 0; i<propertyList.length; i++) {
         if(idArray.includes(propertyList[i]._id.toString())) ansList.push(propertyList[i]);
     }
     return ansList;
 }
+
 
 const getPropertyById = async (id) => {
     id = validate.checkId(id);
@@ -100,8 +129,19 @@ const getPropertyById = async (id) => {
     return obj;
 }
 
+const removeProperty = async (id) => {
+    validate.checkId(id);
+    const propertyCollection = await properties();
+    const deletionInfo = await propertyCollection.deleteOne({_id: ObjectID(id)});
+
+    if (deletionInfo.deletedCount === 0) {
+      throw `Could not delete property with id of ${id}`;
+    }
+  }
+
 const createComment = async (id, comment) => {
     id = validate.checkId(id);
+
     comment = validate.checkComment(comment);
     const propertyCollection = await properties();
     let newUpdate = {
@@ -118,10 +158,12 @@ const createComment = async (id, comment) => {
     }
 }
 
-module.exports = {
+
+module.exports={
     createProperty,
     getAllProperties,
-    getAllPropertiesByUser,
     getPropertyById,
-    createComment
+    getAllPropertiesByUser,
+    createComment,
+    removeProperty
 }

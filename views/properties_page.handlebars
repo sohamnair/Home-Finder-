@@ -5,3 +5,32 @@
     My properties or My favourites will call route /owners/properties-list or /students/favourites-list respectively
     On individual property click it will call route /properties/{{id}}
  --}}
+
+
+<main>
+    <div class="studentLinks">  
+        <a href="/students" id="studentElement1">Profile</a>
+        <a href="/students/favourites-list" id="studentElement2">My favourites</a>
+        <a href="/sign-out">Sign-out</a>
+        <br>
+        <br>
+    </div>  
+    <div class="properties">    
+        {{#each data}}
+        <a href="/properties/property/{{_id}}" class="propertyLink">
+            {{#each images}}
+            <img src="{{url}}" width="100" height="100">
+            {{/each}}
+            <p>Address: {{address}}</p>
+            <p>Description: {{description}}</p>
+            <p>Laundry: {{laundry}}</p>
+            <p>Rent: {{rent}} </p>
+            <p>Email: {{emailid}} </p>
+            <p>Area: {{area}} </p>
+            <p>Bed: {{bed}} </p>
+            <p>Bath: {{bath}} </p>
+        </a> 
+        <br>
+        {{/each}}
+    </div>
+</main>

@@ -2,3 +2,69 @@
     Use form to display the data and so user can easily edit and submit the form. Call the route (/owners)
     Keep the layout similar to sign-up page
  --}}
+
+ <main>
+
+     <div class="ownerLinks">  
+        <a href="/owners/properties-list" id="ownerElement2">My favourites</a>
+        <a href="/sign-out">Sign-out</a>
+        <br>
+        <br>
+    </div>
+
+    <p>{{msg}}</p>
+
+  <form method="POST" id="owner-profile" action="/owners">
+    <label for="firstName">
+        First Name:
+        <input type="text" id="firstName" name="firstName" value={{data.firstName}}>
+        <br>
+        <br>
+    </label>
+    <label for="lastName">
+        Last Name:
+        <input type="text" id="lastName" name="lastName" value={{data.lastName}}>
+        <br>
+        <br>
+    </label>
+    <label for="emailIdInput">
+        Email:
+        <input type="email" id="emailIdInput" name="emailIdInput" value={{data.emailId}}>
+        <br>
+        <br>
+    </label>
+    <label for="contact">
+        Contact:
+        <input type="tel" id="contact" name="contact" value={{data.contact}}>
+        <br>
+        <br>
+    </label>
+    <label for = "gender">
+        Gender:
+        <input type="text" id = "gender" name = "gender" value={{data.gender}}>
+        <br>
+        <br>
+    </label>
+    <label for = "city">
+        City:
+        <input type="text" id = "city" name = "city" value={{data.city}}>
+        <br>
+        <br>
+    </label>
+    <label for = "state">
+        State:
+        <input type="text" id = "state" name = "state" value={{data.state}}>
+        <br>
+        <br>
+    </label>
+    <label for = "age">
+        Age:
+        <input type="number" id = "age" name = "age" value={{data.age}}>
+        <br>
+        <br>
+    </label>
+
+    <input type="submit"  value="Update Profile">
+  </form>
+
+</main> 
