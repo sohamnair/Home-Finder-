@@ -60,8 +60,7 @@ const checkUser = async (emailId, password) => {
     if(user===null){
       throw "Either the email or password is invalid";
     }
-    let compare=false;
-    compare = await bcrypt.compare(password, user.hashedPassword);
+    let compare = await bcrypt.compare(password, user.hashedPassword);
     if(!compare){
       throw "Either the email or password is invalid";
     }
@@ -77,7 +76,7 @@ const getAllOwners = async () => {
 
 const getOwnerByEmail = async (emailId) => {
     validate.validateEmail(emailId);
-    let emailId=email.trim().toLowerCase();
+    emailId=emailId.trim().toLowerCase();
     const ownerCollection = await owners();
     const owner = await ownerCollection.findOne({
       emailId: emailId
@@ -85,11 +84,10 @@ const getOwnerByEmail = async (emailId) => {
     return owner;
 }
 
-const updateOwnerDetails = async (emailId, password, firstName, lastName, contact, gender, city, state, age) => {
+const updateOwnerDetails = async (emailId, firstName, lastName, contact, gender, city, state, age) => {
     // we are using emailid to uniquely identify a user to use that while updating user data
-    validate.validateRegistration(emailId,password,firstName,lastName,contact,gender,city,state,age);
+    validate.validateUpdate(emailId,firstName,lastName,contact,gender,city,state,age);
     emailId=emailId.trim().toLowerCase();
-    password=password.trim();
     firstName=firstName.trim();
     lastName=lastName.trim();
     contact=contact.trim();
@@ -100,13 +98,10 @@ const updateOwnerDetails = async (emailId, password, firstName, lastName, contac
 
     let oldOwner = await getOwnerByEmail(emailId);
     let properties = oldOwner.properties;
-
-    // if (password === oldPassword)
-    //   throw "New password cannot be same as the old password"
     
     let ownerUpdateInfo = {
       emailId: emailId,
-      hashedPassword: password,
+      hashedPassword: oldOwner.hashedPassword,
       firstName: firstName,
       lastName: lastName,
       contact: contact,
@@ -124,7 +119,7 @@ const updateOwnerDetails = async (emailId, password, firstName, lastName, contac
   );
 
   if (ownerUpdatedInfo.modifiedCount === 0) {
-    throw 'could not update the owner profile';
+    throw 'Could not update the owner profile';
   }
 
   return await getOwnerByEmail(emailId);
@@ -202,18 +197,10 @@ const editProp = async (id, address, description, laundry, rent, listedBy, email
       return await propertyData.getPropertyById(id);
     }
   }
-
-  const removeProperty = async (id) => {
-    validate.checkId(id);
-    const propertyCollection = await properties();
-    const deletionInfo = await propertyCollection.deleteOne({_id: ObjectID(id)});
-
-    if (deletionInfo.deletedCount === 0) {
-      throw `Could not delete property with id of ${id}`;
-    }
-  }
-
 }
+
+  
+
 
 module.exports = {
     checkUser,
@@ -222,6 +209,5 @@ module.exports = {
     getOwnerByEmail,
     updateOwnerDetails,
     deleteOwner,
-    editProp,
-    removeProperty
+    editProp
 }
