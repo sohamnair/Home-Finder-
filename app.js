@@ -9,13 +9,13 @@ const cookieParser = require('cookie-parser');
 const rateLimit = require("express-rate-limit");
 
 //more than 1 api call should not pass within 10 sec
-const limiter = rateLimit({
-    windowMs: 1000,
-    max: 10,
-});
+// const limiter = rateLimit({
+//     windowMs: 1000,
+//     max: 10,
+// });
 
 // Apply to all requests
-app.use(limiter);
+// app.use(limiter);
 app.use(cookieParser());
 app.use(
   session({
