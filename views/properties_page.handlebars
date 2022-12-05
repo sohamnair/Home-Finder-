@@ -6,20 +6,31 @@
     On individual property click it will call route /properties/{{id}}
  --}}
 
- <div class="properties">
-   {{!-- <h1>{{}}</h1>  display appr heading here--}}
-    <ul>
+
+<main>
+    <div class="studentLinks">  
+        <a href="/students" id="studentElement1">Profile</a>
+        <a href="/students/favourites-list" id="studentElement2">My favourites</a>
+        <a href="/sign-out">Sign-out</a>
+        <br>
+        <br>
+    </div>  
+    <div class="properties">    
         {{#each data}}
-        <li><a href="/properties/{{id}}">
-            Address: {{data.address}} </a> </li>
-        <li>Description: {{data.description}}</li>
-        <li>Laundry: {{data.laundry}}</li>
-        <li>Rent: {{data.rent}} </li>
-        <li>Email: {{data.emailid}} </li>
-        <li>Area: {{data.area}} </li>
-        <li>Bed:{{data.bed}} </li>
-        <li>Bath: {{data.bath}} </li>
+        <a href="/properties/property/{{_id}}" class="propertyLink">
+            {{#each images}}
+            <img src="{{url}}" width="100" height="100">
+            {{/each}}
+            <p>Address: {{address}}</p>
+            <p>Description: {{description}}</p>
+            <p>Laundry: {{laundry}}</p>
+            <p>Rent: {{rent}} </p>
+            <p>Email: {{emailid}} </p>
+            <p>Area: {{area}} </p>
+            <p>Bed: {{bed}} </p>
+            <p>Bath: {{bath}} </p>
+        </a> 
+        <br>
         {{/each}}
-    </ul>
-</div>
-<script src="../data/extra.js"></script> {{!--  <{{!}}/script>  (if closing script tag doesnt work)--}}
+    </div>
+</main>

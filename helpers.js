@@ -154,12 +154,49 @@ function checkComment(comment) {
     return comment.trim();
 }
 
+function validateUpdate(email,firstName,lastName,contact,gender,city,state,age) {
+    if(!email ||!firstName){
+      throw "Input not provided";
+    }
+    if(typeof email!=='string' || typeof firstName!=='string'|| typeof lastName!=='string'|| typeof contact!=='string'|| typeof gender!=='string'|| typeof city!=='string'|| typeof state!=='string'|| typeof age!=='string'){
+      throw "Input must be string";
+    }
+    if(email.trim().length==0 || firstName.trim().length==0|| lastName.trim().length==0|| contact.trim().length==0|| gender.trim().length==0|| city.trim().length==0|| state.trim().length==0|| age.trim().length==0){
+      throw "Input cannot be Empty spaces";
+    }
+    if(!((/^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/).test(email.trim()))){
+      throw "Invalid email";
+    }
+    if(!((/^[a-zA-Z]{2,}$/).test(firstName.trim()))){
+        throw "only letters in firstname, min two characters";
+    }
+    if(!((/^[a-zA-Z]{2,}$/).test(lastName.trim()))){
+        throw "only letters in lastname, min two characters";
+    }
+    if(!((/^[0-9]{10,10}$/).test(contact.trim()))){
+        throw "only numbers in contact, ten characters";
+    }
+    if(!((/^(M|F)$/).test(gender.trim()))){
+        throw "only letters in gender";
+    }
+    if(!((/^[a-zA-Z]{4,}$/).test(city.trim()))){
+        throw "only letters in city, min four characters";
+    }
+    if(!((/^[a-zA-Z]{2,}$/).test(state.trim()))){
+        throw "only letters in state, min two characters";
+    }
+    if(!((/^[0-9][0-9]$/).test(age.trim()))){
+        throw "only numbers in age, two characters";
+    }
+}
+
 module.exports = {
     validateRegistration,
     validateUser,
     validateProperty,
     validateEmail,
     checkId,
-    checkComment
+    checkComment,
+    validateUpdate
 }
 

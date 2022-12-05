@@ -11,19 +11,26 @@ const main = async () => {
     console.log(e);
   }
 
+  try {
+    const movie = await index.student.createUser("sam123@gmail.com","Sam@123","Sam","Briskoff","4811184222","M","Hoboken","NJ","18");
+    console.log(movie);
+  } catch (e) {
+    console.log(e);
+  }
+
+  try {
+    const movie = await index.student.checkUser("sam123@gmail.com","Sam@123");
+    console.log(movie);
+  } catch (e) {
+    console.log(e);
+  }
+
   // try {
-  //   const movie = await index.student.checkUser("sam123@gmail.com","Sam@123");
+  //   const movie = await index.owner.getAllOwners();
   //   console.log(movie);
   // } catch (e) {
   //   console.log(e);
   // }
-
-//   try {
-//     const movie = await index.owner.getAllOwners();
-//     console.log(movie);
-//   } catch (e) {
-//     console.log(e);
-//   }
 
 //   try {
 //     const movie = await index.owner.getOwnerByEmail("david123@gmail.com");
@@ -46,12 +53,12 @@ const main = async () => {
 //     console.log(e);
 //   }
 
-  // try {
-  //   const movie = await index.properties.getAllPropertiesByUser(["637fd64c205a0ed824d2bcdf", "637fd65d6d4afd11f8aeca70"]);
-  //   console.log(movie);
-  // } catch (e) {
-  //   console.log(e);
-  // }
+//   try {
+//     const movie = await index.properties.getAllPropertiesByUser(["637fd64c205a0ed824d2bcdf", "637fd65d6d4afd11f8aeca70"]);
+//     console.log(movie);
+//   } catch (e) {
+//     console.log(e);
+//   }
 
 //   try {
 //     const movie = await index.properties.createComment("637fd64c205a0ed824d2bcdf", "Nice house");
@@ -60,14 +67,28 @@ const main = async () => {
 //     console.log(e);
 //   }
 
-try {
-    const movie = await index.student.createUser("sam123@gmail.com","Sam@123","Sam","Briskoff","4811184222","M","Hoboken","NJ","18");
-    console.log(movie);
-} catch (e) {
-    console.log(e);
-}
 
-  connection.closeConnection();
+
+// try{
+//   const movie = await index.owner.updateOwnerDetails("david123@gmail.com","$2a$10$Ix5wamMAgLUhpJCW72wAWueVQb5cLHIUzVxS6SXPEy0QoA4W4tPqu","David","Numen","5513284727","M","Newport","NJ","24");
+//   console.log(movie);
+// } catch(e){
+//   console.log(e);
+// }
+
+// try{
+//   const property = await index.owner.editProp("6385ac3d57a7a2280f7022e0","216 washington st, Hoboken, NJ, 07030","a beautiful 4 bedroom house","not included","5000","Maunish","david123@gmail.com","2000","4","2");
+//   console.log(property);
+// } catch(e){
+//   console.log(e);
+// }
+
+// try{
+//   const property = await index.owner.deleteProp("6385ac3d57a7a2280f7022e0");
+// } catch(e){
+//   console.log(e);
+// }
+  //connection.closeConnection();
 
 }
 
