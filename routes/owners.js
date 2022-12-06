@@ -19,7 +19,6 @@ router.route('/')
 .post(async (req, res) => {
     try {
         let emailId = req.body.emailIdInput;
-        let password = req.body.passwordInput;
         let firstName = req.body.firstName;
         let lastName = req.body.lastName;
         let contact = req.body.contact;
@@ -37,10 +36,9 @@ router.route('/')
         city=city.trim();
         state=state.trim();
         age=age.trim(); 
-        await index.owner.updateOwnerDetails(emailId, firstName, lastName, contact, gender, city, state, age);
+        let data = await index.owner.updateOwnerDetails(emailId, firstName, lastName, contact, gender, city, state, age);
         
-        req.session.user = {emailId: emailId, userType: 'owner', firstName:firstName};
-        let data = await index.owner.getOwnerByEmail(emailId); 
+        req.session.user = {emailId: emailId, userType: 'owner', firstName:firstName}; 
         return res.render('./owner_profile_page', {title: "Profile", data: data, msg: "Profile updated successfully"});
     }catch(e) {
         let data = await index.owner.getOwnerByEmail(req.body.emailIdInput);

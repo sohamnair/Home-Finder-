@@ -1,74 +1,86 @@
 <main>
-  <form method="POST" id="createPropertyForm" action="/properties/createProperty" enctype="multipart/form-data">
-    <label for="images">
-        Images:
-        <input type="file" accept="image/*" id="images" name="images" placeholder="upload images" multiple>
-        <br>
-        <br>
-    </label>
-    <label for="address">
-        Address:
-        <input type="text" id="address" name="address" placeholder="Enter address here">
-        <br>
-        <br>
-    </label>
-    <label for="descripton">
-        Description:
-        <textarea id="description" cols="40" rows="5" name="description" placeholder="Enter description">
-        </textarea>
-        <br>
-        <br>
-    </label>
-    <label for="laundry">
-        Laundry:
-        <select id="laundry" name="laundry" placeholder="choose laundry details">
-            <option value="Not-Included">Not-Included</option>
-            <option value="In-Unit">In-Unit</option>
-            <option value="Community">Community</option>
-        </select>
-        <br>
-        <br>
-    </label>
-    <label for="rent">
-        Rent:
-        <input type="number" id="rent" name="rent" placeholder="Enter Property rent">
-        <br>
-        <br>
-    </label>
-    <label for = "area">
-        Area:
-        <input type="number" id = "area" name = "area" placeholder="Enter property area">
-        <br>
-        <br>
-    </label>
-    <label for = "bed">
-        Bed:
-        <select id = "bed" name = "bed" placeholder="select bedrooms">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-        </select>
-        <br>
-        <br>
-    </label>
-    <label for = "bath">
-        Bath:
-        <select id = "bath" name = "bath" placeholder="select bathrooms">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-        </select>
-        <br>
-        <br>
-    </label>
-    <br>
-
-    <input type="submit"  value="Create">
-  </form>
-</main> 
+   <form method="POST" id="createPropertyForm" action="/properties/createProperty" enctype="multipart/form-data">
+      <div class="row mb-3">
+         <label for="images" class="col-sm-2 col-form-label">
+         Images:</label>
+         <div class="col-sm-3"> 
+            <input type="file" class="form-control" accept="image/*" id="images" name="images" multiple>
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for="address" class="col-sm-2 col-form-label">
+         Address:</label>
+         <div class="col-sm-3"> 
+            <input type="text" class="form-control" id="address" name="address" placeholder="Enter address here">
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for="description" class="col-sm-2 col-form-label">
+         Description:</label>
+         <div class="col-sm-3"> 
+            <textarea id="description" class="form-control" cols="40" rows="2" name="description" placeholder="Enter Property description"></textarea>
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for="laundry" class="col-sm-2 col-form-label">Laundry:</label>
+         <div class="col-sm-3">
+            <select id="laundry" class="form-control" name="laundry">
+                <option value="">Select Laundry Availability</option>
+               <option value="Not-Included">Not-Included</option>
+               <option value="In-Unit">In-Unit</option>
+               <option value="Community">Community</option>
+            </select>
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for="rent" class="col-sm-2 col-form-label">
+         Rent:</label>
+         <div class="col-sm-3"> 
+            <input type="number" class="form-control" id="rent" name="rent" placeholder="Enter rent">
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for = "area" class="col-sm-2 col-form-label">
+         Area:</label>
+         <div class="col-sm-3"> 
+            <input type="number" class="form-control" id = "area" name = "area" placeholder="Enter property area"> 
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for = "bed" class="col-sm-2 col-form-label">
+         Bedroom:</label>
+         <div class="col-sm-3">
+            <select id = "bed" class="form-control" name = "bed">
+               <option value="">Select no of Bedrooms</option>
+               <option value="1">1</option>
+               <option value="2">2</option>
+               <option value="3">3</option>
+               <option value="4">4</option>
+               <option value="5">5</option>
+               <option value="6">6</option>
+            </select>
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for = "bath" class="col-sm-2 col-form-label">
+         Bathroom:</label>
+         <div class="col-sm-3">
+            <select id = "bath" class="form-control" name = "bath">
+               <option value="">Select no of Bathrooms</option>
+               <option value="1">1</option>
+               <option value="2">2</option>
+               <option value="3">3</option>
+               <option value="4">4</option>
+               <option value="5">5</option>
+               <option value="6">6</option>
+            </select>
+         </div>
+      </div>
+      <div class="mb-3">
+         <input type="submit"  value="Create">
+         <a href="/owners/properties-list"><input type="button"  value="Cancel"></a>
+      </div>
+   </form>
+</main>
+<script src="../public/autoComplete.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8FReQh61YLuQP68YvmQveuU7dY3LVC9w&libraries=places&callback=initAutoComplete" async defer></script>

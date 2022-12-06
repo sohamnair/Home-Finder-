@@ -1,8 +1,29 @@
+
 <main>
     <div class="ownerLinks">  
         <a href="/owners" id="ownerElement1">Profile</a>
         <a href="/sign-out">Sign-out</a>
         <br>
         <br>
-    </div>  
+    </div> 
+   
+   <div class="properties">    
+        {{#each data}}
+        <a href="/properties/editproperty/{{_id}}" class="propertyLink">
+            {{#each images}}
+            <img src="{{url}}" width="100" height="100">
+            {{/each}}
+            <p>Address: {{address}}</p>
+            <p>Rent: {{rent}} </p>
+            <p>Bed: {{bed}} </p>
+            <p>Bath: {{bath}} </p>
+        </a> 
+        <br>
+        {{/each}}
+    </div>
+    
+    
+
+    <a href="/properties/createProperty"><input type="button" value="Add Property" /></a>
+
 </main>

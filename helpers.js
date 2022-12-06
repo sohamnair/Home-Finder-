@@ -113,7 +113,19 @@ function validateProperty(address,description,laundry,rent,listedBy,email,area,b
     if(rent==NaN|| area==NaN|| bed==NaN|| bath==NaN){
         throw "Error : input not a number";
     }
-    if(!((/^[0-9]{1,4}[a-zA-Z, ]+[0-9]+$/).test(address))){
+    if(rent<0 || rent>99999){
+        throw "Error : rent out of bounds";
+    }
+    if(area<=0 || area>99999){
+        throw "Error : area out of bounds";
+    }
+    if(bed<=0 || bed>10){
+        throw "Error : bed out of bounds";
+    }
+    if(bath<=0 || bath>10){
+        throw "Error : bath out of bounds";
+    }
+    if(!((/^[0-9]{1,6}[a-zA-Z, ]+[0-9]*$/).test(address))){
         throw "Error : Invalid address";
     }
     if(!((/^[a-zA-Z0-9 ,\.]+$/).test(description))){
