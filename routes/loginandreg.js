@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const index = require('../data/index');
+const validate = require("../helpers");
 
 router.route('/')
 .get(async (req, res) => {
@@ -39,7 +40,6 @@ router.route('/sign-in')
     try {
         let emailId = req.body.emailIdInput;
         let password = req.body.passwordInput;
-
         let userType = req.body.userType;
         validate.validateUser(emailId, password);
         emailId = emailId.trim().toLowerCase();
@@ -52,7 +52,6 @@ router.route('/sign-in')
         }
         req.session.user = {emailId: emailId, userType: userType, firstName:user.firstName};
         if(req.session.user.userType=='student'){
-
         res.redirect('/properties');
         }
         else{
@@ -91,9 +90,7 @@ router.route('/sign-up')
         let state = req.body.state;
         let age = req.body.age;
         let userType = req.body.userType; 
-
         validate.validateRegistration(emailId, password, firstName, lastName, contact, gender, city, state, age);
-
         if(userType == 'owner') await index.owner.createUser(emailId, password, firstName, lastName, contact, gender, city, state, age);
         else await index.student.createUser(emailId, password, firstName, lastName, contact, gender, city, state, age);
         res.redirect('/sign-in');
@@ -101,7 +98,6 @@ router.route('/sign-up')
         res.status(404).render('./sign-up_page', {title: "Sign-up Form", error: e})
     }
 })
-
 
 router.route('/sign-out')
 .get(async (req, res) => {
