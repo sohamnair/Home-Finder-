@@ -1,74 +1,81 @@
-
 <main>
-  <form method="POST" id="signup-form" action="/sign-up">
-    <label for="emailIdInput">
-        Email:
-        <input type="email" id="emailIdInput" name="emailIdInput" placeholder="Enter a valid email id">
-        <br>
-        <br>
-    </label>
-    <label for="passwordInput">
-        Password:
-        <input type="password" id="passwordInput" name="passwordInput" placeholder="Enter a valid password">
-        <br>
-        <br>
-    </label>
-    <label for="firstName">
-        First Name:
-        <input type="text" id="firstName" name="firstName" placeholder="Enter a valid first name">
-        <br>
-        <br>
-    </label>
-    <label for="lastName">
-        Last Name:
-        <input type="text" id="lastName" name="lastName" placeholder="Enter a valid last name">
-        <br>
-        <br>
-    </label>
-    <label for="contact">
-        Telephone:
-        <input type="tel" id="contact" name="contact" placeholder="Enter a valid phone number">
-        <br>
-        <br>
-    </label>
-    <label for = "gender">
-        Gender:
-        <input type="text" id = "gender" name = "gender" placeholder="Enter M or F">
-        <br>
-        <br>
-    </label>
-    <label for = "city">
-        City:
-        <input type="text" id = "city" name = "city" placeholder="Enter city name">
-        <br>
-        <br>
-    </label>
-    <label for = "state">
-        State:
-        <input type="text" id = "state" name = "state" placeholder="Enter state name">
-        <br>
-        <br>
-    </label>
-    <label for = "age">
-        Age:
-        <input type="number" id = "age" name = "age" placeholder="Enter age">
-        <br>
-        <br>
-    </label>
-
-    
-    <input type="radio" id = "userType" name = "userType" value="student">
-    <label for="userType"> Student</label>
-    <br>
-    <br>
-    <input type="radio" id = "userType" name = "userType" value="owner">
-    <label for="userType"> Owner</label>
-    <br>
-    <br>
-
-    <input type="submit"  value="Sign-Up">
-  </form>
-
-  <a href="/sign-in">Already have an account? Click here to Sign In!</a>
-
-</main> 
+   <form method="POST" id="signup-form" action="/sign-up">
+      <div class="row mb-3">
+         <label for="emailIdInput" class="col-sm-2 col-form-label">Email:</label>
+         <div class="col-sm-3">
+            <input type="email" class="form-control" id="emailIdInput" name="emailIdInput" placeholder="Enter a valid email id">
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for="passwordInput" class="col-sm-2 col-form-label">Password:</label>
+         <div class="col-sm-3">
+            <input type="password" class="form-control" id="passwordInput" name="passwordInput" placeholder="Enter a valid password">
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for="firstName" class="col-sm-2 col-form-label">First Name:</label>
+         <div class="col-sm-3">
+            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter a valid first name">
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for="lastName" class="col-sm-2 col-form-label">Last Name:</label>
+         <div class="col-sm-3">
+            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter a valid last name">
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for="contact" class="col-sm-2 col-form-label">Telephone:</label>
+         <div class="col-sm-3">
+            <input type="tel" class="form-control" id="contact" name="contact" placeholder="Enter a valid phone number">
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for = "gender" class="col-sm-2 col-form-label">Gender:</label>
+         <div class="col-sm-3">
+            <select id = "gender" class="form-control" name = "gender">
+               <option value="">Select a gender</option>
+               <option value="M">M</option>
+               <option value="F">F</option>
+            </select>
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for = "city" class="col-sm-2 col-form-label">City:</label>
+         <div class="col-sm-3">
+            <input type="text" class="form-control" id = "city" name = "city" placeholder="Enter city name">
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for = "state" class="col-sm-2 col-form-label">State:</label>
+         <div class="col-sm-3">
+            <input type="text" class="form-control" id = "state" name = "state" placeholder="Enter state name">
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for = "age" class="col-sm-2 col-form-label">Age:</label>
+         <div class="col-sm-3">
+            <input type="number" class="form-control" class="form-control" id = "age" name = "age" placeholder="Enter age">
+         </div>
+      </div>
+      <fieldset class="row mb-3">
+         <legend class="col-form-label col-sm-2 pt-0">Are you a Student or Owner</legend>
+         <div class="col-sm-3">
+            <div class="form-check">
+               <input class="form-check-input" type="radio" id = "student" name = "userType" value="student" checked>
+               <label class="form-check-label" for="student">
+               Student
+               </label>
+            </div>
+            <div class="form-check">
+               <input class="form-check-input" type="radio" name="userType" id="owner" value="owner">
+               <label class="form-check-label" for="owner">
+               Owner
+               </label>
+            </div>
+         </div>
+      </fieldset>
+      <input type="submit" class="btn btn-primary" value="Sign-Up">
+   </form>
+   <a href="/sign-in">Already have an account? Click here to Sign In!</a>
+</main>
