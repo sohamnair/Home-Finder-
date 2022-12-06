@@ -6,7 +6,13 @@ const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
 const session = require('express-session')
 const cookieParser = require('cookie-parser');
+
 const rateLimit = require("express-rate-limit");
+require("dotenv/config");
+
+const static = express.static(__dirname + '/public');
+app.use('/public', static);
+
 
 //more than 1 api call should not pass within 10 sec
 // const limiter = rateLimit({

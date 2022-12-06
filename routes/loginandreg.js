@@ -8,7 +8,12 @@ router.route('/')
         res.redirect('/sign-in');
     } 
     else {
-        res.redirect('/properties');
+        if(req.session.user.userType=='student'){
+            res.redirect('/properties');
+        }
+        else{
+            res.redirect('/owners/properties-list');
+        }
     }
 
     // res.redirect('/properties');
@@ -20,7 +25,12 @@ router.route('/sign-in')
         return res.render('./sign-in_page', {title: "Sign-in Page"});
     } 
     else {
-        res.redirect('/properties');
+        if(req.session.user.userType=='student'){
+            res.redirect('/properties');
+        }
+        else{
+            res.redirect('/owners/properties-list');
+        }
     }
 
     // return res.render('./sign-in_page', {title: "Sign-in Page"});
@@ -29,11 +39,25 @@ router.route('/sign-in')
     try {
         let emailId = req.body.emailIdInput;
         let password = req.body.passwordInput;
-        let userType = req.body.userType; 
-        if(userType == 'owner') await index.owner.checkUser(emailId, password);
-        else await index.student.checkUser(emailId, password);
-        req.session.user = {emailId: emailId};
+
+        let userType = req.body.userType;
+        validate.validateUser(emailId, password);
+        emailId = emailId.trim().toLowerCase();
+        let user;
+        if(userType == 'owner'){
+            user = await index.owner.checkUser(emailId, password);
+        }
+        else{
+            user = await index.student.checkUser(emailId, password);
+        }
+        req.session.user = {emailId: emailId, userType: userType, firstName:user.firstName};
+        if(req.session.user.userType=='student'){
+
         res.redirect('/properties');
+        }
+        else{
+            res.redirect('/owners/properties-list');
+        }
     }catch(e) {
         res.status(404).render('./sign-in_page', {title: "Sign-in Page", error: e})
     }
@@ -45,7 +69,12 @@ router.route('/sign-up')
         return res.render('./sign-up_page', {title: "Sign-up Form"});
     } 
     else {
-        res.redirect('/properties');
+        if(req.session.user.userType=='student'){
+            res.redirect('/properties');
+        }
+        else{
+            res.redirect('/owners/properties-list');
+        } 
     }
 
     // return res.render('./sign-up_page', {title: "Sign-up Form"});
@@ -62,6 +91,9 @@ router.route('/sign-up')
         let state = req.body.state;
         let age = req.body.age;
         let userType = req.body.userType; 
+
+        validate.validateRegistration(emailId, password, firstName, lastName, contact, gender, city, state, age);
+
         if(userType == 'owner') await index.owner.createUser(emailId, password, firstName, lastName, contact, gender, city, state, age);
         else await index.student.createUser(emailId, password, firstName, lastName, contact, gender, city, state, age);
         res.redirect('/sign-in');
@@ -69,5 +101,14 @@ router.route('/sign-up')
         res.status(404).render('./sign-up_page', {title: "Sign-up Form", error: e})
     }
 })
+
+
+router.route('/sign-out')
+.get(async (req, res) => {
+    req.session.destroy();
+    res.clearCookie('AuthCookie');
+    return res.render('./logout_page', {title: "Logout Successful"});
+})
+
 
 module.exports = router;
