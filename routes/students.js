@@ -1,4 +1,5 @@
 const express = require('express');
+//const { student } = require('../data/index');
 const router = express.Router();
 const index = require('../data/index');
 
@@ -18,7 +19,7 @@ router.route('/')
 .post(async (req, res) => {
     try {
         let emailId = req.body.emailIdInput;
-        let password = req.body.passwordInput;
+        //let password = req.body.passwordInput;
         let firstName = req.body.firstName;
         let lastName = req.body.lastName;
         let contact = req.body.contact;
@@ -26,9 +27,10 @@ router.route('/')
         let city = req.body.city;
         let state = req.body.state;
         let age = req.body.age;
-        validate.validateRegistration(emailId,password,firstName,lastName,contact,gender,city,state,age);
+        
+        validate.validateUpdate(emailId,firstName,lastName,contact,gender,city,state,age);
         emailId=emailId.trim().toLowerCase();
-        password=password.trim();
+        //password=password.trim();
         firstName=firstName.trim();
         lastName=lastName.trim();
         contact=contact.trim();
@@ -36,13 +38,13 @@ router.route('/')
         city=city.trim();
         state=state.trim();
         age=age.trim(); 
-        await index.student.updateStudentDetails(emailId, password, firstName, lastName, contact, gender, city, state, age);
+        let data = await index.student.updateStudentDetails(emailId, firstName, lastName, contact, gender, city, state, age);
         
         req.session.user = {emailId: emailId, userType: 'student', firstName:firstName};
-        let data = await index.owner.getStudentByEmail(emailId); 
+        //let data = await index.student.getStudentByEmail(emailId); 
         return res.render('./student_profile_page', {title: "Profile", data: data, msg: "Profile updated successfully"});
     }catch(e) {
-        let data = await index.owner.getStudentByEmail(emailId); 
+        let data = await index.student.getStudentByEmail(req.body.emailIdInput); 
         res.status(404).render('./student_profile_page', {title: "Profile", data: data, msg: "Profile updated failed", error: e})
     }
 })
@@ -54,15 +56,41 @@ router.route('/favourites-list')
     } 
     else {
         let emailId = req.session.user.emailId;
-        let response = index.owner.getOwnerByEmail(emailId); 
-        if(!response.properties || response.properties.length == 0) return res.render('./student_properties_empty_list_page', {title: "No favourites found"});
+        let response = await index.student.getStudentByEmail(emailId); 
+        //console.log(response.favourites);
+
+        if(!response.favourites || response.favourites.length == 0) return res.render('./student_properties_empty_list_page', {title: "No favourites found"});
         else {
             let data = await index.properties.getAllPropertiesByUser(response.favourites);
             return res.render('./student_favourites_list_page', {title: "Favourites", data: data});
         }
     }
-})
-// .post(async (req, res) => {})
+});
+//  .post(async (req, res) => {
+//     try{
+//         await index.student.addFavouriteProperty(req.session.user.emailId, req.params.id);
+//         console.log('Added to favs!');
+//     } catch(e) {
+//         console.log('not added to favs');
+//         return res.status(404).render('./error_page', {title: "Error", error: e});
 
+//     }
+//  })
+
+router.post('/favourites-list/:id', 
+    async(req, res) => {
+        try{
+            //console.log(req.session.user.emailId);
+            await index.student.addFavouriteProperty(req.session.user.emailId, req.params.id);
+            console.log('Added to favs!');
+
+
+        } catch(e) {
+            console.log('not added to favs');
+            return res.status(404).render('./error_page', {title: "Error", error: e});
+
+        }
+    }
+);
 
 module.exports = router;

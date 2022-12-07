@@ -37,10 +37,10 @@ router.route('/')
         city=city.trim();
         state=state.trim();
         age=age.trim(); 
-        await index.owner.updateOwnerDetails(emailId, firstName, lastName, contact, gender, city, state, age);
+        let data = await index.owner.updateOwnerDetails(emailId, firstName, lastName, contact, gender, city, state, age);
         
         req.session.user = {emailId: emailId, userType: 'owner', firstName:firstName};
-        let data = await index.owner.getOwnerByEmail(emailId); 
+        //let data = await index.owner.getOwnerByEmail(emailId); 
         return res.render('./owner_profile_page', {title: "Profile", data: data, msg: "Profile updated successfully"});
     }catch(e) {
         let data = await index.owner.getOwnerByEmail(req.body.emailIdInput);

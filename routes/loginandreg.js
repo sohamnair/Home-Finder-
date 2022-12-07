@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const index = require('../data/index');
 
+const validate = require("../helpers");
+
 router.route('/')
 .get(async (req, res) => {
     if (!req.session.user) {

@@ -6,31 +6,72 @@
 
 <main>
     <div class="studentLinks">  
-         <a href="/properties">Properties</a>
-        <a href="/students/favourites-list" id="studentElement2">My favourites</a>
+         <a href="/properties">Properties</a> <br>
+        <a href="/students/favourites-list" id="studentElement2">My favourites</a> <br>
         <a href="/sign-out">Sign-out</a>
         <br>
         <br>
     </div>
-    <article class="student_profile">
-        <h2>{{msg}}</h2>
-        <dl>
-            <dt>Email:</dt><dd>{{data.email}}</dd>
-            <dt>Password:</dt><dd>{{data.password}}</dd> {{!--Should password be displayed here? --}}
-            <dt>First Name</dt>
-            <dd>{{data.firstName}}</dd>
-            <dt>Last Name</dt>
-            <dd>{{data.lastName}}</dd>
-            <dt>Contact</dt>
-            <dd>{{data.contact}}</dd>
-            <dt>Gender</dt>
-            <dd>{{data.gender}}</dd>
-            <dt>City</dt>
-            <dd>{{data.city}}</dd>
-            <dt>State</dt>
-            <dd>{{data.state}}</dd>
-            <dt>Age</dt>
-            <dd>{{data.age}}</dd>
-        </dl>
-    </article>
+
+    <p>{{msg}}</p>
+
+    <form method="POST" id="student-profile" action="/students">
+        <label for="firstName">
+            First Name:
+            <input type="text" id="firstName" name="firstName" value={{data.firstName}}>
+            <br>
+            <br>
+        </label>
+
+        <label for="lastName">
+            Last Name:
+            <input type="text" id="lastName" name="lastName" value={{data.lastName}}>
+            <br>
+            <br>
+        </label>
+    
+        <label for="emailIdInput">
+            Email:
+            <input type="email" id="emailIdInput" name="emailIdInput" value={{data.emailId}}>
+            <br>
+            <br>
+        </label>
+
+        <label for="contact">
+            Contact:
+            <input type="tel" id="contact" name="contact" value={{data.contact}}>
+            <br>
+            <br>
+        </label>
+    
+        <label for = "gender">
+            Gender:
+            <input type="text" id = "gender" name = "gender" value={{data.gender}}>
+            <br>
+            <br>
+        </label>
+    
+        <label for = "city">
+            City:
+            <input type="text" id = "city" name = "city" value={{data.city}}>
+            <br>
+            <br>
+        </label>
+    
+        <label for = "state">
+            State:
+            <input type="text" id = "state" name = "state" value={{data.state}}>
+            <br>
+            <br>
+        </label>
+    
+        <label for = "age">
+            Age:
+            <input type="number" id = "age" name = "age" value={{data.age}}>
+            <br>
+            <br>
+        </label>
+
+    <input type="submit"  value="Update">
+  </form>
 </main>
