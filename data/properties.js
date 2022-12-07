@@ -61,29 +61,9 @@ const createProperty = async (images,address, description, laundry, rent, listed
 
     const stevensLat = 40.744838;
     const stevensLng = -74.025683;
-    let distance = getDistanceFromLatLonInMi(stevensLat,stevensLng,addresLat,addresLng);
+    let distance = validate.getDistanceFromLatLonInMi(stevensLat,stevensLng,addresLat,addresLng);
     distance=Number(distance.toFixed(2));
     
-    // getDistanceFromLatLonInMi : https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates
-    
-    function getDistanceFromLatLonInMi(lat1, lon1, lat2, lon2) {
-        var R = 3958.8; // Radius of the earth in Miles
-        var dLat = deg2rad(lat2-lat1);  // deg2rad below
-        var dLon = deg2rad(lon2-lon1); 
-        var a = 
-            Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
-            Math.sin(dLon/2) * Math.sin(dLon/2)
-            ; 
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-        var d = R * c; // Distance in Miles
-        return d;
-        }
-
-        function deg2rad(deg) {
-        return deg * (Math.PI/180)
-        }
-    //
     const newProperty={
         images:imageBuffer,
         address:formattedAddress,
@@ -131,6 +111,7 @@ const getAllProperties = async () => {
 
 
 const getAllPropertiesByUser = async (idArray) => {
+    validate.validateArray(idArray);
     const propertyCollection = await properties();
     const propertyList = await propertyCollection.find({}).toArray();
     if (!propertyList) throw 'Internal server error, could not get all properties';
