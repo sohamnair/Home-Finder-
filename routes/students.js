@@ -49,9 +49,14 @@ router.route('/favourites-list')
     } 
     else {
         let emailId = req.session.user.emailId;
-        let response = index.owner.getOwnerByEmail(emailId); 
+        let response = await index.student.getStudentByEmail(emailId);
+        if(response.favourites.length==0){
+            return res.render('./student_properties_empty_list_page',{title : "No Favourites Added"});
+        }
+        else{
         let data = await index.properties.getAllPropertiesByUser(response.favourites);
         return res.render('./student_favourites_list_page', {title: "Favourites", data: data});
+        }
     }
 })
 // .post(async (req, res) => {})
