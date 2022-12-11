@@ -6,7 +6,6 @@
     On individual property click it will call route /properties/{{id}}
  --}}
 
-
 <main>
     <div class="studentLinks">  
         <a href="/students" id="studentElement1">Profile</a>
@@ -15,6 +14,11 @@
         <br>
         <br>
     </div>  
+    <form class="form-search form-inline" action='search' method='GET'>
+        <label class="nav-item active" for="search-input"></label>
+        <input class="bg-light form-control form-control-sm" name="search-input" type="text" id="search-input" placeholder="Search...">
+    </form>
+
     <div class="properties">    
         {{#each data}}
         <a href="/properties/property/{{_id}}" class="propertyLink">
@@ -25,7 +29,7 @@
             <p>Description: {{description}}</p>
             <p>Laundry: {{laundry}}</p>
             <p>Rent: {{rent}} </p>
-            <p>Email: {{emailid}} </p>
+            <p>Email: {{emailId}} </p>
             <p>Area: {{area}} </p>
             <p>Bed: {{bed}} </p>
             <p>Bath: {{bath}} </p>

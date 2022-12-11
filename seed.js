@@ -82,7 +82,7 @@ const main = async () => {
 // }
 
 try{
-  const property = await index.owner.deleteProp("6385ac3d57a7a2280f7022e0");
+  const property = await index.properties.searchProp("w");
 } catch(e){
   console.log(e);
 }

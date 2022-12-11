@@ -3,7 +3,7 @@ const properties = mongoCollections.properties;
 const owners = mongoCollections.owners;
 const validate = require("../helpers");
 const ownerData = require("./owners");
-const { ObjectId } = require("mongodb");
+const { ObjectId, ServerApiVersion } = require("mongodb");
 const cloudinary = require('../config/cloudinary');
 const { default: axios } = require('axios');
 require("dotenv/config");
@@ -196,6 +196,20 @@ const createComment = async (id, comment) => {
     }
 }
 
+const searchProp = async (search) => {
+    try {
+        if (!search) throw new Error('You must provide text to search');    
+        if (typeof search !== 'string') throw new TypeError('search must be a string');
+
+        let Prop = search.toLowerCase();
+        const propertyCollection = await properties();
+        const searchPropresults = await propertyCollection.find({address: { $regex: Prop } }, {description: { $regex: Prop } }).toArray();
+        //console.log(searchPropresults);
+        return searchPropresults;
+    } catch (err) {
+        throw err;
+    }
+}
 
 module.exports={
     createProperty,
@@ -203,5 +217,6 @@ module.exports={
     getPropertyById,
     getAllPropertiesByUser,
     createComment,
-    removeProperty
+    removeProperty,
+    searchProp
 }
