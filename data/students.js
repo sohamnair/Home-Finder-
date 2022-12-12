@@ -127,7 +127,6 @@ const updateStudentDetails = async (emailId, firstName, lastName, contact, gende
 
 const deleteStudent = async(emailId) => {
   const studentCollection = await students();
-  //const student = await getStudentByEmail(emailId);
   const deletionInfo = await studentCollection.deleteOne({emailId: emailId});
 
   if (deletionInfo.deletedCount === 0) {

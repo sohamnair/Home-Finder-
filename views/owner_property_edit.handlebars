@@ -1,63 +1,100 @@
-
 <main>
-   <form method="POST" id="property-list" action="/properties/editproperty/{{_id}}">
 
-      <label for="address">Address:
-      <input type="text" id="address" name="address" value={{data.address}}>
-      <br>
-      <br>
-      </label>
+   <p>{{msg}}</p>
 
-      <label for="description">Description:
-      <input type="text" id="description" name="description" value={{data.description}}>
-      <br>
-      <br>
-      </label>
+   <form method="POST" action="/properties/editProperty/{{data._id}}">
+   
+      <div class="row mb-3">
+         <label for="images" class="col-sm-2 col-form-label">
+         Images:</label>
+         <div class="col-sm-3"> 
+            <input type="file" class="form-control" accept="image/*" id="images" name="images" multiple>
+         </div>
+      </div>
+
+      <div class="row mb-3">
+         <label for="address" class="col-sm-2 col-form-label">
+         Address:</label>
+         <div class="col-sm-3"> 
+            <input type="text" class="form-control" id="address" name="address" value="{{data.address}}">
+         </div>
+      </div>
+
+      <div class="row mb-3">
+         <label for="description" class="col-sm-2 col-form-label">
+         Description:</label>
+         <div class="col-sm-3"> 
+            <input type="text" id="description" class="form-control" name="description" value="{{data.description}}">
+         </div>
+      </div>
+
+      <div class="row mb-3">
+         <label for="laundry" class="col-sm-2 col-form-label">
+         Laundry:</label>
+         <div class="col-sm-3">
+         <input type="text" class="form-control" id="laundry" name="laundry" value="{{data.laundry}}">
+         </div>
+      </div>
+
+
+      <div class="row mb-3">
+         <label for="rent" class="col-sm-2 col-form-label">
+         Rent:</label>
+         <div class="col-sm-3"> 
+            <input type="number" class="form-control" id="rent" name="rent" value="{{data.rent}}">
+         </div>
+      </div>
+
+      <div class="row mb-3">
+         <label for="listedBy" class="col-sm-2 col-form-label">
+         Listed By:</label>
+         <div class="col-sm-3">
+         <input type="text" class="form-control" id="listedBy" name="listedBy" value="{{data.listedBy}}">
+         </div>
+      </div>
       
-      <label for="laundry">Laundry:
-      <input type="number" id="laundry" name="laundry" value={{data.laundry}}>
-      <br>
-      <br>
-      </label>
+      <div class="row mb-3">
+         <label for="emailId" class="col-sm-2 col-form-label">
+         Email Id:</label>
+         <div class="col-sm-3">
+         <input type="email" class="form-control" id="emailId" name="emailId" value="{{data.emailId}}">
+         </div>
+      </div>
 
-      <label for="rent">Rent:
-      <input type="number" id="rent" name="rent" value={{data.rent}}>
-      <br>
-      <br>
-      </label>
+      <div class="row mb-3">
+         <label for="area" class="col-sm-2 col-form-label">
+         Area:</label>
+         <div class="col-sm-3">
+         <input type="text" class="form-control" id="area" name="area" value="{{data.area}}">
+         </div>
+      </div>
 
-      <label for="listedBy">Listed By:
-      <input type="text" id="listedBy" name="listedBy" value={{data.listedBy}}>
-      <br>
-      <br>
-      </label>
-
-      <label for="emailId">Email Id:
-      <input type="email" id="emailId" name="emailId" value={{data.emailId}}>
-      <br>
-      <br>
-      </label>
-
-      <label for="area">Area:
-      <input type="text" id="area" name="area" value={{data.area}}>
-      <br>
-      <br>
-      </label>
-
-      <label for="bed">Bed:
-      <input type="number" id="bed" name="bed" value={{data.bed}}>
-      <br>
-      <br>
-      </label>
-
-      <label for="bath">Bath:
-      <input type="number" id="bath" name="bath" value={{data.bath}}>
-      <br>
-      <br>
-      </label>
+      <div class="row mb-3">
+         <label for="bed" class="col-sm-2 col-form-label">
+         Bed:</label>
+         <div class="col-sm-3">
+         <input type="number" class="form-control" id="bed" name="bed" value="{{data.bed}}">
+         </div>
+      </div>
       
-      <input type="submit"  value="Update">
+      <div class="row mb-3">
+      <label for="bath" class="col-sm-2 col-form-label">
+         Bath:</label>
+         <div class="col-sm-3">
+         <input type="number" class="form-control" id="bath" name="bath" value="{{data.bath}}">
+         </div>
+      </div>
+
+
+      <input type="submit" class="btn btn-primary" value="Update">
+
    </form>
-    
+   <br>
+   <form method="POST" id="delete-btn" action="/properties/deleteProperty/{{data._id}}">
+      <input type="submit"  value="Delete" class="btn btn-primary">
+   </form>
 
  </main>
+
+<script src="../public/autoComplete.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8FReQh61YLuQP68YvmQveuU7dY3LVC9w&libraries=places&callback=initAutoComplete" async defer></script>
