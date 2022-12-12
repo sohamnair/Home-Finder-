@@ -3,6 +3,7 @@ const loginAndRegRoute = require('./loginAndReg');
 const ownerRoute = require('./owners');
 const studentRoute = require('./students');
 const propertieRoute = require('./properties');
+const searchRoute = require('./search');
 
 
 const constructorMethod = (app) => {
@@ -10,6 +11,7 @@ const constructorMethod = (app) => {
   app.use('/owners', ownerRoute);
   app.use('/students', studentRoute);
   app.use('/properties', propertieRoute);
+  app.use('/search', searchRoute);
 
   app.use('*', (req, res) => {
     if (!req.session.user) {

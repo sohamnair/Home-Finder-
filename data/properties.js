@@ -2,10 +2,11 @@ const mongoCollections = require('../config/mongoCollections');
 const properties = mongoCollections.properties;
 const owners = mongoCollections.owners;
 const { students } = require('../config/mongoCollections');
-const { ObjectId } = require("mongodb");
+const { ObjectId, ServerApiVersion } = require("mongodb");
 
 const validate = require("../helpers");
 const index = require('./index');
+
 const cloudinary = require('../config/cloudinary');
 const { default: axios } = require('axios');
 require("dotenv/config");
@@ -277,6 +278,20 @@ const getSortedData = async (txt) => {
     return sorted;
 }
 
+const searchProp = async (search) => {
+    try {
+        if (!search) throw new Error('You must provide text to search');    
+        if (typeof search !== 'string') throw new TypeError('search must be a string');
+
+        let Prop = search.toLowerCase();
+        const propertyCollection = await properties();
+        const searchPropresults = await propertyCollection.find({address: { $regex: Prop } }, {description: { $regex: Prop } }).toArray();
+        //console.log(searchPropresults);
+        return searchPropresults;
+    } catch (err) {
+        throw err;
+    }
+}
 
 module.exports={
     createProperty,
@@ -286,4 +301,5 @@ module.exports={
     createComment,
     removeProperty,
     getSortedData
+    searchProp
 }

@@ -1,0 +1,75 @@
+<div class="studentLinks">  
+    <a href="/students" id="studentElement1">Profile</a>
+    <a href="/students/favourites-list" id="studentElement2">My favourites</a>
+    <a href="/sign-out">Sign-out</a>
+    <br>
+    <br>
+</div> 
+
+<form class="form-search form-inline" action='search' method='GET'>
+        <label class="nav-item active" for="search-input"></label>
+        <input class="bg-light form-control form-control-sm" name="search-input" type="text" id="search-input" placeholder="Search...">
+</form>
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+        <h1 class='text-center'>Search results</h1>
+    </div> 
+
+    <div>    
+        {{#each searchPropresults}}
+        <a href="/properties/property/{{_id}}" class="propertyLink">
+            {{#each images}}
+            <img src="{{url}}" width="100" height="100">
+            {{/each}}
+            <p>Address: {{address}}</p>
+            <p>Description: {{description}}</p>
+            <p>Laundry: {{laundry}}</p>
+            <p>Rent: {{rent}} </p>
+            <p>Email: {{emailId}} </p>
+            <p>Area: {{area}} </p>
+            <p>Bed: {{bed}} </p>
+            <p>Bath: {{bath}} </p>
+        </a> 
+        <br>
+        {{else}}
+            <p>Sorry, No properties found</p>
+        {{/each}}
+    </div>
+</div> 
+
+
+{{!-- <main>
+    <div class="studentLinks">  
+        <a href="/students" id="studentElement1">Profile</a>
+        <a href="/students/favourites-list" id="studentElement2">My favourites</a>
+        <a href="/sign-out">Sign-out</a>
+        <br>
+        <br>
+    </div>  
+
+    <form id="search-form">
+        <input type="text" id="search-input" placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
+    
+    <div id="searchPropresults-template" type="text/x-handlebars-template">    
+        {{#each searchPropresults}}
+        <a href="/properties/property/{{searchPropresults._id}}" class="propertyLink">
+            {{#each images}}
+            <img src="{{url}}" width="100" height="100">
+            {{/each}}
+            <p>Address: {{searchPropresults.address}}</p>
+            <p>Description: {{searchPropresults.description}}</p>
+            <p>Laundry: {{searchPropresults.laundry}}</p>
+            <p>Rent: {{searchPropresults.rent}} </p>
+            <p>Email: {{searchPropresults.emailid}} </p>
+            <p>Area: {{searchPropresults.area}} </p>
+            <p>Bed: {{searchPropresults.bed}} </p>
+            <p>Bath: {{searchPropresults.bath}} </p>
+        </a> 
+        <br>
+        {{/each}}
+    </div>
+</main> --}}

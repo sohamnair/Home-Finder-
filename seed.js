@@ -94,7 +94,13 @@ const main = async () => {
   //   console.log(e);
   // }
 
-  connection.closeConnection();
+try{
+  const property = await index.properties.searchProp("w");
+} catch(e){
+  console.log(e);
+}
+
+connection.closeConnection();
 
 }
 
