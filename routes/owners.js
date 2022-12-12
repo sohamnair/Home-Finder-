@@ -54,7 +54,6 @@ router.route('/properties-list')
     else {
         let emailId = req.session.user.emailId;
         let response = await index.owner.getOwnerByEmail(emailId); 
-        console.log(response.properties);
         if(!response.properties || response.properties.length == 0) return res.render('./owner_properties_empty_list_page', {title: "No properties found"});
         else {
             let data = await index.properties.getAllPropertiesByUser(response.properties);

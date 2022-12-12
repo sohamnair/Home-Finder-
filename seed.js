@@ -81,11 +81,19 @@ const main = async () => {
 //   console.log(e);
 // }
 
-try{
-  const property = await index.owner.deleteProp("6385ac3d57a7a2280f7022e0");
-} catch(e){
-  console.log(e);
-}
+// try{
+//   const property = await index.owner.deleteProp("6385ac3d57a7a2280f7022e0");
+// } catch(e){
+//   console.log(e);
+// }
+
+  // try {
+  //   const prop = await index.properties.getSortedData("4");
+  //   console.log(prop);
+  // } catch (e) {
+  //   console.log(e);
+  // }
+
   connection.closeConnection();
 
 }
