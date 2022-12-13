@@ -47,7 +47,7 @@ router.route('/property/:id')
             validate.checkId(id);
             let data = await index.properties.getPropertyById(id);
 
-            return res.render('./property_page', {title: "Property", data: data});
+            return res.render('./property_page', {title: "Property", data: data, emailId : req.session.user.emailId, id: id});
         }
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});
