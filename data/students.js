@@ -146,11 +146,16 @@ const addFavouriteProperty = async(emailId, id) =>{
   validate.validateEmail(emailId);
   const studentCollection = await students();
 
-  //if fav already exists, show alert
+  // var elem = document.getElementById('addFavourites');
+ 
   let studentData = await studentCollection.findOne({emailId: emailId});
   if(studentData.favourites.includes(id)){
+    //elem.value = 'Added!'
     throw 'Property already exists in favourites!';
   }
+
+  //  if (elem.value=="Added!") elem.value = "Add to favourites";
+  // else elem.value = "Added!";
 
   const favouritesInfo = await studentCollection.updateOne({emailId: emailId}, {$push: {favourites: id}});
 

@@ -35,14 +35,17 @@
         <dt>Bath:</dt>
         <dd>{{data.bath}}</dd>
     </dl>
-    
+
     <form id="addToFavourites" method="POST" action="/students/favourites-list/{{id}}">
-        <button class="FavouriteButton" type="submit"> Add to favorites </button>
+        <button class="FavouriteButton" id ="favouritesButton" type="submit"> Add to favorites </button>
     </form>
     
-    <br> <a href="javascript:history.back()">Make another search</a>
+    {{!-- "favourites(\'' + {{emailId}} + '\' , \''+ {{id}} + '\')" --}}
+    {{!-- <input onclick="favourites(\'' + {{emailId}} + '\',\'' + {{id}} + '\')" type="button" value="Add to fav" id="favouritesButton"></input> --}}
+    {{!-- <input onclick="favourites()" id="favouritesButton" type="button" value="Add to fav"></input> --}}
 
-  {{!--  
-    <a href="#" onClick="addFavouriteProperty("+{{emailId}}+","+{{id}}+");"> Add to favorites </a>
---}}
+    <br> 
+    <a href="javascript:history.back()">Make another search</a>
+
 </main>
+<script src="/public/extra.js"></script>
