@@ -85,10 +85,12 @@ const getStudentByEmail = async (emailId) => {
 const updateStudentDetails = async (emailId, firstName, lastName, contact, gender, city, state, age) => {
   // we are using emailid to uniquely identify a user to use that while updating user data
 
+
   validate.validateUpdate(emailId,firstName,lastName,contact,gender,city,state,age);
   //validate.validateRegistration(emailId,password,firstName,lastName,contact,gender,city,state,age);
   emailId=emailId.trim().toLowerCase();
  // password=password.trim();
+
   firstName=firstName.trim();
   lastName=lastName.trim();
   contact=contact.trim();
@@ -96,6 +98,7 @@ const updateStudentDetails = async (emailId, firstName, lastName, contact, gende
   city=city.trim();
   state=state.trim();
   age=age.trim();
+
   //let hash = await bcrypt.hash(password, saltRounds);
 
   let oldStudent = await getStudentByEmail(emailId);
@@ -103,7 +106,9 @@ const updateStudentDetails = async (emailId, firstName, lastName, contact, gende
 
   const updatedStudent = {
     emailId: emailId,
+
     hashedPassword: oldStudent.hashedPassword, //hash password
+
     firstName: firstName,
     lastName: lastName,
     contact: contact,
@@ -131,7 +136,6 @@ const updateStudentDetails = async (emailId, firstName, lastName, contact, gende
 const deleteStudent = async(emailId) => {
   validate.validateEmail(emailId);
   const studentCollection = await students();
-  //const student = await getStudentByEmail(emailId);
   const deletionInfo = await studentCollection.deleteOne({emailId: emailId});
 
   if (deletionInfo.deletedCount === 0) {

@@ -19,7 +19,6 @@ router.route('/')
 .post(async (req, res) => {
     try {
         let emailId = req.body.emailIdInput;
-        let password = req.body.passwordInput;
         let firstName = req.body.firstName;
         let lastName = req.body.lastName;
         let contact = req.body.contact;
@@ -39,8 +38,8 @@ router.route('/')
         age=age.trim(); 
         let data = await index.owner.updateOwnerDetails(emailId, firstName, lastName, contact, gender, city, state, age);
         
-        req.session.user = {emailId: emailId, userType: 'owner', firstName:firstName};
-        //let data = await index.owner.getOwnerByEmail(emailId); 
+        req.session.user = {emailId: emailId, userType: 'owner', firstName:firstName}; 
+        
         return res.render('./owner_profile_page', {title: "Profile", data: data, msg: "Profile updated successfully"});
     }catch(e) {
         let data = await index.owner.getOwnerByEmail(req.body.emailIdInput);
@@ -56,7 +55,6 @@ router.route('/properties-list')
     else {
         let emailId = req.session.user.emailId;
         let response = await index.owner.getOwnerByEmail(emailId); 
-
         if(!response.properties || response.properties.length == 0) return res.render('./owner_properties_empty_list_page', {title: "No properties found"});
         else {
             let data = await index.properties.getAllPropertiesByUser(response.properties);

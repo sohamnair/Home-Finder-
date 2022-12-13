@@ -88,7 +88,22 @@ const main = async () => {
 // } catch(e){
 //   console.log(e);
 // }
-  //connection.closeConnection();
+
+
+  // try {
+  //   const prop = await index.properties.getSortedData("4");
+  //   console.log(prop);
+  // } catch (e) {
+  //   console.log(e);
+  // }
+
+try{
+  const property = await index.properties.searchProp("w");
+} catch(e){
+  console.log(e);
+}
+
+connection.closeConnection();
 
 }
 

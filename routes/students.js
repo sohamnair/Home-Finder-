@@ -2,7 +2,6 @@ const express = require('express');
 //const { student } = require('../data/index');
 const router = express.Router();
 const index = require('../data/index');
-
 const validate = require("../helpers");
 
 router.route('/')
@@ -13,13 +12,12 @@ router.route('/')
     else {
         let emailId = req.session.user.emailId;
         let data = await index.student.getStudentByEmail(emailId); 
-        return res.render('./student_profile_page', {title: "Profile", data: data, msg: ""});
+        return res.render('./student_profile_page', {title: "Profile", data: data});
     }
 })
 .post(async (req, res) => {
     try {
         let emailId = req.body.emailIdInput;
-        //let password = req.body.passwordInput;
         let firstName = req.body.firstName;
         let lastName = req.body.lastName;
         let contact = req.body.contact;
@@ -27,6 +25,7 @@ router.route('/')
         let city = req.body.city;
         let state = req.body.state;
         let age = req.body.age;
+
         
         validate.validateUpdate(emailId,firstName,lastName,contact,gender,city,state,age);
         emailId=emailId.trim().toLowerCase();
@@ -39,6 +38,7 @@ router.route('/')
         state=state.trim();
         age=age.trim(); 
         let data = await index.student.updateStudentDetails(emailId, firstName, lastName, contact, gender, city, state, age);
+
         
         req.session.user = {emailId: emailId, userType: 'student', firstName:firstName};
         //let data = await index.student.getStudentByEmail(emailId); 
@@ -46,6 +46,7 @@ router.route('/')
     }catch(e) {
         let data = await index.student.getStudentByEmail(req.body.emailIdInput); 
         res.status(404).render('./student_profile_page', {title: "Profile", data: data, msg: "Profile updated failed", error: e})
+
     }
 })
 
@@ -59,7 +60,9 @@ router.route('/favourites-list')
         let response = await index.student.getStudentByEmail(emailId); 
         //console.log(response.favourites);
 
-        if(!response.favourites || response.favourites.length == 0) return res.render('./student_properties_empty_list_page', {title: "No favourites found"});
+        if(!response.favourites || response.favourites.length == 0) {
+            return res.render('./student_properties_empty_list_page', {title: "No favourites found"});
+        }
         else {
             let data = await index.properties.getAllPropertiesByUser(response.favourites);
             return res.render('./student_favourites_list_page', {title: "Favourites", data: data});
