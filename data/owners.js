@@ -4,7 +4,9 @@ const properties = mongoCollections.properties;
 const owners = mongoCollections.owners;
 const validate = require("../helpers");
 const bcrypt = require('bcryptjs');
-const { ObjectID } = require('bson');
+const cloudinary = require('../config/cloudinary');
+const { ObjectId } = require('mongodb');
+require("dotenv/config");
 //const { properties } = require('../config/mongoCollections');
 const saltRounds = 10;
 
@@ -140,24 +142,56 @@ const deleteOwner = async (emailId) => {
 
 }
 
-const editProp = async (id, address, description, laundry, rent, listedBy, emailId, area, bed, bath) => {
+const editProp = async (id,images, address, description, laundry, rent, listedBy, emailId, area, bed, bath) => {
   validate.checkId(id);
-  validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
+  // validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
     
-    address=address.trim()
-    description=description.trim()
-    laundry=laundry.trim()
-    rent=rent.trim()
-    listedBy=listedBy.trim()
-    emailId=emailId.trim()
-    area=area.trim()
-    bed=bed.trim()
-    bath=bath.trim()
+  let imageBuffer=[];
+  // let result;
+  // for(let i=0;i<images.length;i++){
+  //     result = await cloudinary.uploader.upload(images[i],{
+  //         //uploaded images are stored in sanjan's cloudinary account under uploads folder
+  //         folder: "uploads",
+  //         //width and crop to alter image size, not needed right now, will uncomment if needed in future
+  //         // width:300,
+  //         // crop:"scale"
+  //     });
+  //     imageBuffer.push({
+  //         _id: new ObjectId(),
+  //         url: result.secure_url
+  //     })
+  // };
 
-    rent=Number(rent);
-    area=Number(area);
-    bed=Number(bed);
-    bath=Number(bath);
+  address=address.trim()
+  description=description.trim()
+  laundry=laundry.trim()
+  rent=rent.trim()
+  listedBy=listedBy.trim()
+  emailId=emailId.trim()
+  area=area.trim()
+  bed=bed.trim()
+  bath=bath.trim()
+
+  rent=Number(rent);
+  area=Number(area);
+  bed=Number(bed);
+  bath=Number(bath);
+
+  let formattedAddress;
+  let response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
+      params:{
+          address:address,
+          key:'AIzaSyD8FReQh61YLuQP68YvmQveuU7dY3LVC9w'
+      }
+  });
+  formattedAddress=response.data.results[0].formatted_address
+  addresLat=response.data.results[0].geometry.location.lat;
+  addresLng=response.data.results[0].geometry.location.lng;
+
+  const stevensLat = 40.744838;
+  const stevensLng = -74.025683;
+  let distance = validate.getDistanceFromLatLonInMi(stevensLat,stevensLng,addresLat,addresLng);
+  distance=Number(distance.toFixed(2));
   
   const owner = await getOwnerByEmail(emailId);
   let oldproperty = owner.properties;
@@ -165,13 +199,18 @@ const editProp = async (id, address, description, laundry, rent, listedBy, email
     if(id === oldproperty[i]){
       const property = await propertyData.getPropertyById(id);
 
-      let oldComment = await property.comments;
+      let oldComment = property.comments;
+      let oldImages = property.images;
+      for(let i=0;i<oldImages.length;i++){
+        imageBuffer.push(oldImages[i]);
+      }
       let current = new Date();
       let dateListed = (current.getMonth()+1)+"/"+current.getDate()+"/"+current.getFullYear();
 
       const updateProperty={
-          _id: ObjectID(id),
-          address:address,
+          _id: ObjectId(id),
+          images:imageBuffer,
+          address:formattedAddress,
           description:description,
           laundry:laundry,
           dateListed:dateListed,
@@ -181,12 +220,13 @@ const editProp = async (id, address, description, laundry, rent, listedBy, email
           area:area,
           bed:bed,
           bath:bath,
+          distance:distance,
           comments:oldComment
       }
 
       const propertyCollection = await properties();
       const propertyUpdatedInfo = await propertyCollection.updateOne(
-        {_id: ObjectID(id)},
+        {_id: ObjectId(id)},
         {$set: updateProperty}
       );
     

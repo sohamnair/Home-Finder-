@@ -5,7 +5,6 @@
     All the property info is stored in the variable named data. So do data.<whatever you want> eg: data.address, etc.
  --}}
 
-{{!-- Added handlebar, testing pending --}}
 
 <main>
     <dl>
@@ -36,5 +35,17 @@
         <dt>Bath:</dt>
         <dd>{{data.bath}}</dd>
     </dl>
+
+    <form id="addToFavourites" method="POST" action="/students/favourites-list/{{id}}">
+        <button class="FavouriteButton" id ="favouritesButton" type="submit"> Add to favorites </button>
+    </form>
+    
+    {{!-- "favourites(\'' + {{emailId}} + '\' , \''+ {{id}} + '\')" --}}
+    {{!-- <input onclick="favourites(\'' + {{emailId}} + '\',\'' + {{id}} + '\')" type="button" value="Add to fav" id="favouritesButton"></input> --}}
+    {{!-- <input onclick="favourites()" id="favouritesButton" type="button" value="Add to fav"></input> --}}
+
+    <br> 
     <a href="javascript:history.back()">Make another search</a>
+
 </main>
+<script src="/public/extra.js"></script>
