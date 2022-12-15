@@ -214,16 +214,11 @@ const searchProp = async (search) => {
         if (!search) throw new Error('You must provide text to search');    
         if (typeof search !== 'string') throw new TypeError('search must be a string');
 
-        let Prop = search.toLowerCase();
-        //let searchPropresults = [];
+        let prop = search.toLowerCase();
+        var regex = new RegExp([".*", prop, ".*"].join(""), "i");
         const propertyCollection = await properties();
-        //const propresults = await propertyCollection.find({}, {projection : {hasehedPasword : 0}}).toArray();
-        const searchPropresults = await propertyCollection.find({address: { $regex: Prop } }, {description: { $regex: Prop } }, {area: { $regex: Prop } }, {bed: { $regex: Prop } }, {bath: { $regex: Prop } }, ).toArray();
-        // for(i in propresults){
-        //     if(propresults[i].address.includes(prop) || propresults[i].description.includes(prop) || propresults[i].area.includes(prop) || propresults[i].laundry.includes(prop) || propresults[i].bed.includes(prop) || propresults[i].bath.includes(prop) || propresults[i].distance.includes(prop)) 
-        //         searchPropresults.push(propresults[i])
-        // }
-        //console.log(propresults);
+        const searchPropresults = await propertyCollection.find({ $or: [{ "address": regex }, { "description": regex }, { "laundry": regex }, {"rent": regex}, { "bed": regex }, { "bath": regex }, {"distance": regex}] }).toArray();
+
         return searchPropresults;
     } catch (err) {
         throw err;
