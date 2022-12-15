@@ -86,10 +86,27 @@ router.post('/favourites-list/:id',
             //console.log(req.session.user.emailId);
             await index.student.addFavouriteProperty(req.session.user.emailId, req.params.id);
             console.log('Added to favs!');
-
+            return res.redirect(`/properties/property/${req.params.id}`);
 
         } catch(e) {
             console.log('not added to favs');
+            return res.status(404).render('./error_page', {title: "Error", error: e});
+
+        }
+    }
+);
+
+router.post('/remove-favourites-list/:id', 
+    async(req, res) => {
+        try{
+            //console.log(req.session.user.emailId);
+            await index.student.removeFavouriteProperty(req.session.user.emailId, req.params.id);
+            // console.log('Added to favs!');
+            return res.redirect(`/properties/property/${req.params.id}`);
+
+
+        } catch(e) {
+            // console.log('not added to favs');
             return res.status(404).render('./error_page', {title: "Error", error: e});
 
         }

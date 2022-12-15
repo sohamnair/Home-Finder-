@@ -151,17 +151,11 @@ const addFavouriteProperty = async(emailId, id) =>{
   validate.validateEmail(emailId);
   const studentCollection = await students();
 
-  // var elem = document.getElementById('addFavourites');
- 
+  //if fav already exists, show alert
   let studentData = await studentCollection.findOne({emailId: emailId});
   if(studentData.favourites.includes(id)){
-    //elem.value = 'Added!'
     throw 'Property already exists in favourites!';
   }
-
-  //  if (elem.value=="Added!") elem.value = "Add to favourites";
-  // else elem.value = "Added!";
-
   const favouritesInfo = await studentCollection.updateOne({emailId: emailId}, {$push: {favourites: id}});
 
   if (favouritesInfo.modifiedCount === 0) {
@@ -202,6 +196,21 @@ const removeFavouriteProperty = async(emailId, id) =>{
 //   return {deleted: true};
 // };
 
+const checkFavourite=async(id,emailId)=>{
+  validate.checkId(id);
+  id=id.toString().trim();
+  validate.checkEmail(emailId);
+  emailId=emailId.toString().trim();
+  const stu = await getStudentByEmail(emailId);
+  let fav=false;
+  stu.favourites.forEach(element => {
+    if(element===id){
+      fav = true;
+    }
+  });
+  return fav;
+}
+
 module.exports = {
     checkUser,
     createUser,
@@ -211,5 +220,6 @@ module.exports = {
     deleteStudent,
     addFavouriteProperty,
     removeFavouriteProperty,
+    checkFavourite
     //removeFavouritePropertiesById
 }

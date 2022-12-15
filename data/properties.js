@@ -112,7 +112,6 @@ const createProperty = async (images,address, description, laundry, rent, listed
     //add property to owner's property array
 
     const ownerCollection = await owners();
-    newId = ObjectId(newId);
     const updatedInfo = await ownerCollection.updateOne(
         {emailId: emailId},
         {$addToSet: {properties:newId}}
@@ -225,30 +224,23 @@ const removeProperty = async (id, emailId) => {
 
     const studentCollection = await students();
     const studentData = await studentCollection.find({}).toArray();
-    let emailIdArr, favouritesArr;
-    for(let i = 0; i<studentData.length; i++) {
-        favouritesArr.push(studentData[i].favourites);
-        emailIdArr.push(studentData[i].emailId);
-    }
-    for(let i = 0; i<favouritesArr.length; i++) {
-        for(let j = 0; j<favouritesArr[i].length; j++) {
-            if(favouritesArr[i][j].toString() == id) {
-                favouritesArr[i][j].splice(j, 1);
-
-                let studentUpdateInfo = {
-                    favourites: favouritesArr[i]
-                }
-            
-                const studentUpdatedInfo = await studentCollection.updateOne(
-                    {emailId: emailIdArr[i]},
-                    {$set: studentUpdateInfo}
-                );
-            
-                if (studentUpdatedInfo.modifiedCount === 0) {
-                    throw 'Could not update the owner profile';
-                }
+    if(studentData.length>0){
+        studentData.forEach(studentuser=>{
+            if(studentuser.favourites.length>0){
+                studentuser.favourites.forEach(async favId=>{
+                    if(favId===id){
+                        const updatedInfo = await studentCollection.updateOne({
+                            emailId:studentuser.emailId
+                        },{
+                            $pull:{favourites:favId}
+                        });
+                        if (updatedInfo.modifiedCount === 0) {
+                            throw 'Error : could not delete image';
+                        }  
+                    }
+                })
             }
-        }
+        })
     }
 }
 
@@ -318,12 +310,40 @@ const searchProp = async (search) => {
         let prop = search.toLowerCase();
         var regex = new RegExp([".*", prop, ".*"].join(""), "i");
         const propertyCollection = await properties();
-        const searchPropresults = await propertyCollection.find({ $or: [{ "address": regex }, { "description": regex }, { "laundry": regex }, {"rent": regex}, { "bed": regex }, { "bath": regex }, {"distance": regex}] }).toArray();
+        const searchPropresults = await propertyCollection.find({ $or: [{ "address": regex }, { "description": regex }, { "laundry": regex },{ "dateListed": regex }, {"rent": regex},{ "listedBy": regex },{ "emailId": regex }, { "bed": regex }, { "bath": regex }, {"distance": regex}] }).toArray();
 
         return searchPropresults;
     } catch (err) {
         throw err;
     }
+}
+
+const deleteImage = async (id) => {
+    id=validate.checkId(id);
+    id=id.toString();    
+    const propertyCollection = await properties();
+    const propList = await propertyCollection.find({}).toArray();
+    let propId;
+    propList.forEach(prop=>{
+        prop.images.forEach(img=>{
+            img._id=img._id.toString();
+            if(id===img._id){
+                propId=prop._id;
+            }
+        })
+    })
+    if(!propId){
+        throw "Error : no such image exists";
+    }
+    const updatedInfo = await propertyCollection.updateOne({
+        _id:ObjectId(propId)
+    },{
+        $pull:{images:{_id:ObjectId(id)}}
+    });
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'Error : could not delete image';
+    }
+    return propId.toString();
 }
 
 module.exports={
@@ -333,7 +353,8 @@ module.exports={
     getAllPropertiesByUser,
     createComment,
     removeProperty,
-    getSortedData,
     searchProp,
-    removePropertybyEmail
+    removePropertybyEmail,
+    getSortedData,
+    deleteImage
 }
