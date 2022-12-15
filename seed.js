@@ -14,14 +14,14 @@ const main = async () => {
 
   try {
     const owner = await index.owner.createUser("sam123@gmail.com","Sam@123","Sam","Adams","5512468888","M","Hoboken","NJ","39");
-    console.log(movie);
+    console.log(owner);
   } catch (e) {
     console.log(e);
   }
 
   try {
     const owner = await index.student.createUser("sam123@gmail.com","Sam@123","Sam","Briskoff","4811184222","M","Hoboken","NJ","18");
-    console.log(movie);
+    console.log(owner);
   } catch (e) {
     console.log(e);
   }
@@ -60,7 +60,6 @@ const main = async () => {
   } catch (e) {
     console.log(e);
   }
-=========
   // try {
   //   const property = await index.properties.createProperty("296 Park Avenue, Hoboken, NJ, 07030","a beautiful 3 bedroom 2 bathroom house","not included","2000","John","john123@gmail.com","1000","3","2");
   //   console.log(property);
@@ -127,8 +126,6 @@ const main = async () => {
   // } catch (e) {
   //   console.log(e);
   // }
-
-=========
 
 try{
   const owner = await index.properties.searchProp('washington');
