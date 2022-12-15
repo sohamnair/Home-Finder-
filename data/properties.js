@@ -1,9 +1,12 @@
 const mongoCollections = require('../config/mongoCollections');
 const properties = mongoCollections.properties;
 const owners = mongoCollections.owners;
-const validate = require("../helpers");
-const ownerData = require("./owners");
+const { students } = require('../config/mongoCollections');
 const { ObjectId, ServerApiVersion } = require("mongodb");
+
+const validate = require("../helpers");
+const index = require('./index');
+
 const cloudinary = require('../config/cloudinary');
 const { default: axios } = require('axios');
 require("dotenv/config");
@@ -170,15 +173,84 @@ const getPropertyById = async (id) => {
     return obj;
 }
 
-const removeProperty = async (id) => {
+const removeProperty = async (id, emailId) => {
     validate.checkId(id);
+    validate.validateEmail(emailId);
+
     const propertyCollection = await properties();
-    const deletionInfo = await propertyCollection.deleteOne({_id: ObjectID(id)});
+    const deletionInfo = await propertyCollection.deleteOne(
+        {_id: ObjectId(id)}
+    );
 
     if (deletionInfo.deletedCount === 0) {
-      throw `Could not delete property with id of ${id}`;
+        throw `Could not delete property with id of ${id}`;
     }
-  }
+
+    emailId=emailId.trim().toLowerCase();
+    const ownerCollection = await owners();
+    const ownerData = await ownerCollection.findOne({
+      emailId: emailId
+    });
+    
+    let ownerPropertyListArr = ownerData.properties;
+    for(let i = 0; i<ownerPropertyListArr.length; i++) {
+        if(ownerPropertyListArr[i].toString() == id) {
+            ownerPropertyListArr.splice(i, 1);
+        }
+    }
+
+    let ownerUpdateInfo = {
+        emailId: ownerData.emailId,
+        hashedPassword: ownerData.hashedPassword,
+        firstName: ownerData.firstName,
+        lastName: ownerData.lastName,
+        contact: ownerData.contact,
+        gender: ownerData.gender,
+        city: ownerData.city,
+        state: ownerData.state,
+        age: ownerData.age,
+        properties: ownerPropertyListArr
+    }
+
+    const ownerUpdatedInfo = await ownerCollection.updateOne(
+        {emailId: emailId},
+        {$set: ownerUpdateInfo}
+    );
+
+    if (ownerUpdatedInfo.modifiedCount === 0) {
+        throw 'Could not update the owner profile';
+    }
+
+    // delete from student favourite list  
+
+    const studentCollection = await students();
+    const studentData = await studentCollection.find({}).toArray();
+    let emailIdArr, favouritesArr;
+    for(let i = 0; i<studentData.length; i++) {
+        favouritesArr.push(studentData[i].favourites);
+        emailIdArr.push(studentData[i].emailId);
+    }
+    for(let i = 0; i<favouritesArr.length; i++) {
+        for(let j = 0; j<favouritesArr[i].length; j++) {
+            if(favouritesArr[i][j].toString() == id) {
+                favouritesArr[i][j].splice(j, 1);
+
+                let studentUpdateInfo = {
+                    favourites: favouritesArr[i]
+                }
+            
+                const studentUpdatedInfo = await studentCollection.updateOne(
+                    {emailId: emailIdArr[i]},
+                    {$set: studentUpdateInfo}
+                );
+            
+                if (studentUpdatedInfo.modifiedCount === 0) {
+                    throw 'Could not update the owner profile';
+                }
+            }
+        }
+    }
+}
 
 const removePropertybyEmail = async (emailId) => {
     validate.validateEmail(emailId);
@@ -209,6 +281,35 @@ const createComment = async (id, comment) => {
     }
 }
 
+const getSortedData = async (txt) => {
+    let tempData = await getAllProperties();
+    let sorted = [];
+    if(txt == "1") {
+        sorted = tempData.sort(function (a, b) {
+            return a.rent - b.rent;
+        });
+    }
+    else if(txt == "2") {
+        sorted = tempData.sort(function (a, b) {
+            return b.rent - a.rent;
+        });
+    }
+    else if(txt == "3") {
+        sorted = tempData.sort(function (a, b) {
+            return a.distance - b.distance;
+        });
+    }
+    else if(txt == "4") {
+        sorted = tempData.sort(function (a, b) {
+            return b.distance -  a.distance;
+        });
+    }
+    else if(txt == "0") {
+        sorted = tempData
+    }
+    return sorted;
+}
+
 const searchProp = async (search) => {
     try {
         if (!search) throw new Error('You must provide text to search');    
@@ -233,5 +334,6 @@ module.exports={
     createComment,
     removeProperty,
     searchProp,
-    removePropertybyEmail
+    removePropertybyEmail,
+    getSortedData
 }

@@ -86,9 +86,12 @@ const getStudentByEmail = async (emailId) => {
 const updateStudentDetails = async (emailId, firstName, lastName, contact, gender, city, state, age) => {
   // we are using emailid to uniquely identify a user to use that while updating user data
 
-  //validate.validateEmail(emailId);
+
   validate.validateUpdate(emailId,firstName,lastName,contact,gender,city,state,age);
+  //validate.validateRegistration(emailId,password,firstName,lastName,contact,gender,city,state,age);
   emailId=emailId.trim().toLowerCase();
+ // password=password.trim();
+
   firstName=firstName.trim();
   lastName=lastName.trim();
   contact=contact.trim();
@@ -96,14 +99,17 @@ const updateStudentDetails = async (emailId, firstName, lastName, contact, gende
   city=city.trim();
   state=state.trim();
   age=age.trim();
+
+  //let hash = await bcrypt.hash(password, saltRounds);
+
   let oldStudent = await getStudentByEmail(emailId);
   let favourites = oldStudent.favourites;
 
-  //validations!!!
-  const studentCollection = await students();
   const updatedStudent = {
     emailId: emailId,
-    hashedPassword: oldStudent.hashedPassword,
+
+    hashedPassword: oldStudent.hashedPassword, //hash password
+
     firstName: firstName,
     lastName: lastName,
     contact: contact,
@@ -111,9 +117,11 @@ const updateStudentDetails = async (emailId, firstName, lastName, contact, gende
     city: city,
     state: state,
     age: age,
-    favourites:favourites
+    favourites: favourites
   };
 
+  
+  const studentCollection = await students();
   const updatedInfo = await studentCollection.updateOne(
     {emailId: emailId},
     {$set: updatedStudent}
@@ -127,8 +135,8 @@ const updateStudentDetails = async (emailId, firstName, lastName, contact, gende
 };
 
 const deleteStudent = async(emailId) => {
+  validate.validateEmail(emailId);
   const studentCollection = await students();
-  //const student = await getStudentByEmail(emailId);
   const deletionInfo = await studentCollection.deleteOne({emailId: emailId});
 
   if (deletionInfo.deletedCount === 0) {
@@ -148,7 +156,6 @@ const addFavouriteProperty = async(emailId, id) =>{
   if(studentData.favourites.includes(id)){
     throw 'Property already exists in favourites!';
   }
-
   const favouritesInfo = await studentCollection.updateOne({emailId: emailId}, {$push: {favourites: id}});
 
   if (favouritesInfo.modifiedCount === 0) {
@@ -160,13 +167,13 @@ const addFavouriteProperty = async(emailId, id) =>{
 
 const removeFavouriteProperty = async(emailId, id) =>{
   id = validate.checkId(id);
-  emailId = validate.validateEmail(emailId);
+  validate.validateEmail(emailId);
   const studentCollection = await students();
 
   const favouritesInfo = await studentCollection.updateOne({emailId: emailId}, {$pull: {favourites: id}});
 
   if (favouritesInfo.modifiedCount === 0) {
-    throw 'Could not remove from Student favourite properties';
+    throw 'Could not remove from favourites.';
   }
 
   return await getStudentByEmail(emailId);
@@ -200,9 +207,3 @@ module.exports = {
     removeFavouriteProperty,
     //removeFavouritePropertiesById
 }
-
-
-//Things left to do
-// student should be able to edit his details -- Done
-// student should be able to delete his account -- Done
-// student should be able to add property to favourites --Done

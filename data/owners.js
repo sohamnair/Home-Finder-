@@ -156,23 +156,23 @@ const deleteOwner = async (emailId) => {
 
 const editProp = async (id,images, address, description, laundry, rent, listedBy, emailId, area, bed, bath) => {
   validate.checkId(id);
-  validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
+  // validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
     
   let imageBuffer=[];
-    let result;
-    for(let i=0;i<images.length;i++){
-        result = await cloudinary.uploader.upload(images[i],{
-            //uploaded images are stored in sanjan's cloudinary account under uploads folder
-            folder: "uploads",
-            //width and crop to alter image size, not needed right now, will uncomment if needed in future
-            // width:300,
-            // crop:"scale"
-        });
-        imageBuffer.push({
-            _id: new ObjectId(),
-            url: result.secure_url
-        })
-    };
+  // let result;
+  // for(let i=0;i<images.length;i++){
+  //     result = await cloudinary.uploader.upload(images[i],{
+  //         //uploaded images are stored in sanjan's cloudinary account under uploads folder
+  //         folder: "uploads",
+  //         //width and crop to alter image size, not needed right now, will uncomment if needed in future
+  //         // width:300,
+  //         // crop:"scale"
+  //     });
+  //     imageBuffer.push({
+  //         _id: new ObjectId(),
+  //         url: result.secure_url
+  //     })
+  // };
 
   address=address.trim()
   description=description.trim()
@@ -214,7 +214,7 @@ const editProp = async (id,images, address, description, laundry, rent, listedBy
       let oldComment = property.comments;
       let oldImages = property.images;
       for(let i=0;i<oldImages.length;i++){
-        imagesBuffer.push(oldImages[i]);
+        imageBuffer.push(oldImages[i]);
       }
       let current = new Date();
       let dateListed = (current.getMonth()+1)+"/"+current.getDate()+"/"+current.getFullYear();
