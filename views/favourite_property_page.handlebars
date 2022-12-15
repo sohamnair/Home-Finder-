@@ -7,6 +7,13 @@
 
 
 <main>
+    <div class="studentLinks">  
+        <a href="/properties">Properties</a> <br>
+        <a href="/students/favourites-list" id="studentElement2">My favourites</a> <br>
+        <a href="/sign-out">Sign-out</a>
+        <br>
+        <br>
+    </div>
     <div>
       <div class="row">
       {{#each data.images}}
@@ -54,7 +61,7 @@
     {{!-- <input onclick="favourites()" id="favouritesButton" type="button" value="Add to fav"></input> --}}
 
     <br> 
-    <a href="javascript:history.back()">Make another search</a>
+    <a href="/properties/">Make another search</a>
 
 </main>
 <script src="/public/extra.js"></script>
