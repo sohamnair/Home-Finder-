@@ -5,8 +5,8 @@ const main = async () => {
   await connection.dbConnection();
   
   // try {
-  //   const movie = await index.owner.createUser("david123@gmail.com","David@123","David","Numen","5513284727","M","Hoboken","NJ","24");
-  //   console.log(movie);
+  //   const owner = await index.owner.createUser("sam123@gmail.com","Sam@123","Sam","Adams","5512468888","M","Hoboken","NJ","39");
+  //   console.log(owner);
   // } catch (e) {
   //   console.log(e);
   // }
@@ -33,8 +33,8 @@ const main = async () => {
 //   }
 
   // try {
-  //   const movie = await index.properties.createProperty("226 madison st, Hoboken, NJ, 07030","a beautiful 4 bedroom house","not included","5000","Sanjan","david123@gmail.com","2000","4","2");
-  //   console.log(movie);
+  //   const property = await index.properties.createProperty("296 Park Avenue, Hoboken, NJ, 07030","a beautiful 3 bedroom 2 bathroom house","not included","2000","John","john123@gmail.com","1000","3","2");
+  //   console.log(property);
   // } catch (e) {
   //   console.log(e);
   // }
@@ -81,12 +81,21 @@ const main = async () => {
 //   console.log(e);
 // }
 
+// try{
+//   const owner = await index.student.addFavouriteProperty('sam123@gmail.com', '6398b08ae787cfce64e61566');
+//   console.log(owner);
+// } catch(e){
+//   console.log(e);
+// }
+
 try{
-  const property = await index.properties.searchProp("w");
+  const owner = await index.properties.searchProp('washington');
+  console.log(owner);
 } catch(e){
   console.log(e);
 }
-  connection.closeConnection();
+
+connection.closeConnection();
 
 }
 
