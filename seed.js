@@ -123,6 +123,13 @@ try{
   console.log(e);
 }
 
+// try{
+//   const property = await index.properties.deleteImage("639a93e184e7dd280a7ad58f");
+//   console.log(property);
+// } catch(e){
+//   console.log(e);
+// }
+
 connection.closeConnection();
 
 }

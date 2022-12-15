@@ -8,7 +8,7 @@ router.route('/')
   try {
     let search = xss(req.query['search-input']);
     let searchPropresults = await index.properties.searchProp(search);
-    res.render('./search', {searchPropresults: searchPropresults});
+    res.render('./search', {searchPropresults: searchPropresults,searchQuery:search});
   } catch (err) {
     //console.log(err);
     res.status(404).render('./error_page', {
