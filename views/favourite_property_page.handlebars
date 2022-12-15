@@ -7,13 +7,6 @@
 
 
 <main>
-    <div class="studentLinks">  
-         <a href="/properties">Properties</a> <br>
-        {{!-- <a href="/students/favourites-list" id="studentElement2">My favourites</a> <br> --}}
-        <a href="/sign-out">Sign-out</a>
-        <br>
-        <br>
-    </div>
     <div>
       <div class="row">
       {{#each data.images}}
@@ -34,7 +27,7 @@
         <dd>{{data.laundry}}</dd>
 
         <dt>Rent:</dt>
-        <dd>${{data.rent}}</dd>
+        <dd>{{data.rent}}</dd>
 
         <dt>Listed By:</dt>
         <dd>{{data.listedBy}}</dd>
@@ -43,17 +36,17 @@
         <dd>{{data.emailId}}</dd>
 
         <dt>Area:</dt>
-        <dd>{{data.area}}sqft</dd>
+        <dd>{{data.area}}</dd>
 
         <dt>Bed:</dt>
-        <dd>{{data.bed}} Bedroom</dd>
+        <dd>{{data.bed}}</dd>
 
         <dt>Bath:</dt>
-        <dd>{{data.bath}} Bathroom</dd>
+        <dd>{{data.bath}}</dd>
     </dl>
 
-    <form id="addToFavourites" method="POST" action="/students/favourites-list/{{id}}">
-        <button class="FavouriteButton" id ="favouritesButton" type="submit"> Add to favorites </button>
+    <form id="RemoveFromFavourites" method="POST" action="/students/remove-favourites-list/{{id}}">
+        <button class="FavouriteButton" id ="removeFavouritesButton" type="submit"> Remove From favorites </button>
     </form>
     
     {{!-- "favourites(\'' + {{emailId}} + '\' , \''+ {{id}} + '\')" --}}
@@ -61,7 +54,7 @@
     {{!-- <input onclick="favourites()" id="favouritesButton" type="button" value="Add to fav"></input> --}}
 
     <br> 
-    <a href="/properties/">Make another search</a>
+    <a href="javascript:history.back()">Make another search</a>
 
 </main>
 <script src="/public/extra.js"></script>

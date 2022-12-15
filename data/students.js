@@ -196,6 +196,21 @@ const removeFavouriteProperty = async(emailId, id) =>{
 //   return {deleted: true};
 // };
 
+const checkFavourite=async(id,emailId)=>{
+  validate.checkId(id);
+  id=id.toString().trim();
+  validate.checkEmail(emailId);
+  emailId=emailId.toString().trim();
+  const stu = await getStudentByEmail(emailId);
+  let fav=false;
+  stu.favourites.forEach(element => {
+    if(element===id){
+      fav = true;
+    }
+  });
+  return fav;
+}
+
 module.exports = {
     checkUser,
     createUser,
@@ -205,5 +220,6 @@ module.exports = {
     deleteStudent,
     addFavouriteProperty,
     removeFavouriteProperty,
+    checkFavourite
     //removeFavouritePropertiesById
 }

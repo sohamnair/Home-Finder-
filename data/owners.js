@@ -7,6 +7,7 @@ const validate = require("../helpers");
 const bcrypt = require('bcryptjs');
 const cloudinary = require('../config/cloudinary');
 const { ObjectId } = require('mongodb');
+const axios = require('axios');
 require("dotenv/config");
 //const { properties } = require('../config/mongoCollections');
 const saltRounds = 10;
