@@ -2,6 +2,7 @@ const mongoCollections = require('../config/mongoCollections');
 const students = mongoCollections.students;
 const validate = require("../helpers");
 const bcrypt = require('bcryptjs');
+const { ObjectId } = require("mongodb");
 const saltRounds = 10;
 
 const createUser = async (emailId, password, firstName, lastName, contact, gender, city, state, age) => {
@@ -139,13 +140,19 @@ const deleteStudent = async(emailId) => {
 
 const addFavouriteProperty = async(emailId, id) =>{
   id = validate.checkId(id);
-  emailId = validate.validateEmail(emailId);
+  validate.validateEmail(emailId);
   const studentCollection = await students();
+
+  //if fav already exists, show alert
+  let studentData = await studentCollection.findOne({emailId: emailId});
+  if(studentData.favourites.includes(id)){
+    throw 'Property already exists in favourites!';
+  }
 
   const favouritesInfo = await studentCollection.updateOne({emailId: emailId}, {$push: {favourites: id}});
 
   if (favouritesInfo.modifiedCount === 0) {
-    throw 'Could not update Student favourites';
+    throw 'Could not add to favourites.';
   }
 
   return await getStudentByEmail(emailId);
@@ -165,6 +172,23 @@ const removeFavouriteProperty = async(emailId, id) =>{
   return await getStudentByEmail(emailId);
 };
 
+// const removeFavouritePropertiesById = async(idArray) =>{
+//   for(let i = 0; i<idArray.length; i++) {
+//     idArray[i] = idArray[i].toString();
+//   }
+//   const studentCollection = await students();
+
+//   for(i=0; i<idArray.length; i++){
+//     await studentCollection.updateOne({$pull: {favourites: idArray[i]}});
+//   }
+
+//   // if (favouritesInfo.modifiedCount === 0) {
+//   //   throw 'Could not remove from Student favourite properties';
+//   // }
+
+//   return {deleted: true};
+// };
+
 module.exports = {
     checkUser,
     createUser,
@@ -173,7 +197,8 @@ module.exports = {
     updateStudentDetails,
     deleteStudent,
     addFavouriteProperty,
-    removeFavouriteProperty
+    removeFavouriteProperty,
+    //removeFavouritePropertiesById
 }
 
 

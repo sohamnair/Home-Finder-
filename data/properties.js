@@ -61,9 +61,29 @@ const createProperty = async (images,address, description, laundry, rent, listed
 
     const stevensLat = 40.744838;
     const stevensLng = -74.025683;
-    let distance = validate.getDistanceFromLatLonInMi(stevensLat,stevensLng,addresLat,addresLng);
+    let distance = getDistanceFromLatLonInMi(stevensLat,stevensLng,addresLat,addresLng);
     distance=Number(distance.toFixed(2));
     
+    // getDistanceFromLatLonInMi : https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates
+    
+    function getDistanceFromLatLonInMi(lat1, lon1, lat2, lon2) {
+        var R = 3958.8; // Radius of the earth in Miles
+        var dLat = deg2rad(lat2-lat1);  // deg2rad below
+        var dLon = deg2rad(lon2-lon1); 
+        var a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2)
+            ; 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c; // Distance in Miles
+        return d;
+        }
+
+        function deg2rad(deg) {
+        return deg * (Math.PI/180)
+        }
+    //
     const newProperty={
         images:imageBuffer,
         address:formattedAddress,
@@ -111,7 +131,9 @@ const getAllProperties = async () => {
 
 
 const getAllPropertiesByUser = async (idArray) => {
-    validate.validateArray(idArray);
+    for(let i = 0; i<idArray.length; i++) {
+        validate.checkId(idArray[i]);
+    }
     const propertyCollection = await properties();
     const propertyList = await propertyCollection.find({}).toArray();
     if (!propertyList) throw 'Internal server error, could not get all properties';
@@ -158,6 +180,16 @@ const removeProperty = async (id) => {
     }
   }
 
+const removePropertybyEmail = async (emailId) => {
+    validate.validateEmail(emailId);
+    const propertyCollection = await properties();
+    const deletionInfo = await propertyCollection.deleteOne({emailId: emailId});
+
+    if(deletionInfo.deletedCount === 0) {
+        throw `Could not delete property with email of ${emailId}`
+    }
+}
+
 const createComment = async (id, comment) => {
     id = validate.checkId(id);
 
@@ -183,9 +215,15 @@ const searchProp = async (search) => {
         if (typeof search !== 'string') throw new TypeError('search must be a string');
 
         let Prop = search.toLowerCase();
+        //let searchPropresults = [];
         const propertyCollection = await properties();
-        const searchPropresults = await propertyCollection.find({address: { $regex: Prop } }, {description: { $regex: Prop } }).toArray();
-        //console.log(searchPropresults);
+        //const propresults = await propertyCollection.find({}, {projection : {hasehedPasword : 0}}).toArray();
+        const searchPropresults = await propertyCollection.find({address: { $regex: Prop } }, {description: { $regex: Prop } }, {area: { $regex: Prop } }, {bed: { $regex: Prop } }, {bath: { $regex: Prop } }, ).toArray();
+        // for(i in propresults){
+        //     if(propresults[i].address.includes(prop) || propresults[i].description.includes(prop) || propresults[i].area.includes(prop) || propresults[i].laundry.includes(prop) || propresults[i].bed.includes(prop) || propresults[i].bath.includes(prop) || propresults[i].distance.includes(prop)) 
+        //         searchPropresults.push(propresults[i])
+        // }
+        //console.log(propresults);
         return searchPropresults;
     } catch (err) {
         throw err;
@@ -199,5 +237,6 @@ module.exports={
     getAllPropertiesByUser,
     createComment,
     removeProperty,
-    searchProp
+    searchProp,
+    removePropertybyEmail
 }
