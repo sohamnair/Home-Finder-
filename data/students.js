@@ -179,22 +179,18 @@ const removeFavouriteProperty = async(emailId, id) =>{
   return await getStudentByEmail(emailId);
 };
 
-// const removeFavouritePropertiesById = async(idArray) =>{
-//   for(let i = 0; i<idArray.length; i++) {
-//     idArray[i] = idArray[i].toString();
-//   }
-//   const studentCollection = await students();
+const removeFavouritePropertiesById = async(id) =>{
 
-//   for(i=0; i<idArray.length; i++){
-//     await studentCollection.updateOne({$pull: {favourites: idArray[i]}});
-//   }
+  const studentCollection = await students();
 
-//   // if (favouritesInfo.modifiedCount === 0) {
-//   //   throw 'Could not remove from Student favourite properties';
-//   // }
+  await studentCollection.updateOne({$pull: {favourites: id}});
 
-//   return {deleted: true};
-// };
+  if (favouritesInfo.modifiedCount === 0) {
+    throw 'Could not remove from Student favourite properties';
+  }
+
+  return {deleted: true};
+};
 
 const checkFavourite=async(id,emailId)=>{
   validate.checkId(id);
@@ -220,6 +216,6 @@ module.exports = {
     deleteStudent,
     addFavouriteProperty,
     removeFavouriteProperty,
-    checkFavourite
-    //removeFavouritePropertiesById
+    checkFavourite,
+    removeFavouritePropertiesById
 }
