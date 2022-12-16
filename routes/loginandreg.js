@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const index = require('../data/index');
+
 const validate = require("../helpers");
 
 router.route('/')
@@ -50,9 +51,9 @@ router.route('/sign-in')
         else{
             user = await index.student.checkUser(emailId, password);
         }
-        req.session.user = {emailId: emailId, userType: userType, firstName:user.firstName};
+        req.session.user = {emailId: emailId, userType: userType, firstName:user.firstName,lastName:user.lastName};
         if(req.session.user.userType=='student'){
-        res.redirect('/properties');
+            res.redirect('/properties');
         }
         else{
             res.redirect('/owners/properties-list');

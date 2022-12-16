@@ -46,15 +46,20 @@ router.route('/property/:id')
             let id = req.params.id;
             validate.checkId(id);
             let data = await index.properties.getPropertyById(id);
-
-            return res.render('./property_page', {title: "Property", data: data});
+            let favourite = await index.student.checkFavourite(id,req.session.user.emailId);
+            if(favourite){
+                return res.render('./favourite_property_page', {title: "Property", data: data, emailId : req.session.user.emailId, id: id});
+            }
+            else{
+                return res.render('./property_page', {title: "Property", data: data, emailId : req.session.user.emailId, id: id});
+            }
         }
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});
     }
 })
 
-router.route('/property/:id/comments')
+router.route('/property/comments/:id')
 .post(async (req, res) => {
     try {
         if (!req.session.user) {
@@ -65,8 +70,16 @@ router.route('/property/:id/comments')
             let comment = req.body.comment;
             validate.checkId(id);
             validate.checkComment(comment);
-            await index.properties.createComment(id, comment);
-            res.redirect(`/properties/property/${id}`);
+            let emailId = req.session.user.emailId;
+            let firstName = req.session.user.firstName;
+            let lastName = req.session.user.lastName;
+            await index.properties.createComment(id,emailId,firstName,lastName,comment);
+            if(req.session.user.userType==='student'){
+                res.redirect(`/properties/property/${id}`);
+            }
+            else{
+                res.redirect(`/properties/editProperty/${id}`);
+            }
         }
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});
@@ -139,15 +152,17 @@ router.route('/editProperty/:id')
     try {
         id = validate.checkId(id);
         let imageBuffer=[];
-        // for(let i=0;i<req.files.length;i++){
-        //     let mime = req.files[i].mimetype;
-        //     if(!((/^image\/(png|jpeg|jpg|tif|pjp|apng|xbm|jxl|svgz|ico|tiff|gif|svg|jfif|webp|bmp|pjpeg|avif)$/).test(mime))){
-        //         throw "Error: Selected image is not a right image type";
-        //     }
-        //     let base = req.files[i].buffer.toString('base64');
-        //     let url = "data:"+mime+";base64,"+base;
-        //     imageBuffer.push(url);
-        // }
+        if(req.files){
+            for(let i=0;i<req.files.length;i++){
+                let mime = req.files[i].mimetype;
+                if(!((/^image\/(png|jpeg|jpg|tif|pjp|apng|xbm|jxl|svgz|ico|tiff|gif|svg|jfif|webp|bmp|pjpeg|avif)$/).test(mime))){
+                    throw "Error: Selected image is not a right image type";
+                }
+                let base = req.files[i].buffer.toString('base64');
+                let url = "data:"+mime+";base64,"+base;
+                imageBuffer.push(url);
+            }
+        }
         let address = req.body.address;
         let description = req.body.description;
         let laundry = req.body.laundry;
@@ -157,7 +172,7 @@ router.route('/editProperty/:id')
         let area = req.body.area;
         let bed = req.body.bed;
         let bath = req.body.bath;
-        console.log(req.files+" "+id+" "+address+" "+description+" "+laundry+" "+rent+" "+listedBy+" "+emailId+" "+area+" "+bed+" "+bath);
+        // console.log(req.files+" "+id+" "+address+" "+description+" "+laundry+" "+rent+" "+listedBy+" "+emailId+" "+area+" "+bed+" "+bath);
         validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
         await index.owner.editProp(id,imageBuffer,address,description,laundry,rent,listedBy,emailId,area,bed,bath);
         let data = await index.properties.getPropertyById(id);
@@ -168,7 +183,7 @@ router.route('/editProperty/:id')
 })
 
 router.route('/deleteProperty/:id')
-.post(async (req, res) => {
+.get(async (req, res) => {
     let id = req.params.id;
     try {
         if (!req.session.user) {
@@ -178,6 +193,23 @@ router.route('/deleteProperty/:id')
             id = validate.checkId(id);
             await index.properties.removeProperty(id, req.session.user.emailId);
             res.redirect('/owners/properties-list')
+        }
+    }catch(e) {
+        return res.status(404).render('./error_page', {title: "Error", error: e});
+    }
+})
+
+router.route('/deleteImage/:id')
+.get(async (req, res) => {
+    let id = req.params.id;
+    try {
+        if (!req.session.user) {
+            res.redirect('/sign-in');
+        } 
+        else {
+            id = validate.checkId(id);
+            let propId = await index.properties.deleteImage(id);
+            res.redirect('/properties/editProperty/'+propId);
         }
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});
