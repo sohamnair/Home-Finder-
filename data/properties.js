@@ -64,9 +64,29 @@ const createProperty = async (images,address, description, laundry, rent, listed
 
     const stevensLat = 40.744838;
     const stevensLng = -74.025683;
-    let distance = validate.getDistanceFromLatLonInMi(stevensLat,stevensLng,addresLat,addresLng);
+    let distance = getDistanceFromLatLonInMi(stevensLat,stevensLng,addresLat,addresLng);
     distance=Number(distance.toFixed(2));
     
+    // getDistanceFromLatLonInMi : https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates
+    
+    function getDistanceFromLatLonInMi(lat1, lon1, lat2, lon2) {
+        var R = 3958.8; // Radius of the earth in Miles
+        var dLat = deg2rad(lat2-lat1);  // deg2rad below
+        var dLon = deg2rad(lon2-lon1); 
+        var a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2)
+            ; 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c; // Distance in Miles
+        return d;
+        }
+
+        function deg2rad(deg) {
+        return deg * (Math.PI/180)
+        }
+    //
     const newProperty={
         images:imageBuffer,
         address:formattedAddress,
@@ -92,7 +112,6 @@ const createProperty = async (images,address, description, laundry, rent, listed
     //add property to owner's property array
 
     const ownerCollection = await owners();
-    newId = ObjectId(newId);
     const updatedInfo = await ownerCollection.updateOne(
         {emailId: emailId},
         {$addToSet: {properties:newId}}
@@ -114,7 +133,9 @@ const getAllProperties = async () => {
 
 
 const getAllPropertiesByUser = async (idArray) => {
-    validate.validateArray(idArray);
+    for(let i = 0; i<idArray.length; i++) {
+        validate.checkId(idArray[i]);
+    }
     const propertyCollection = await properties();
     const propertyList = await propertyCollection.find({}).toArray();
     if (!propertyList) throw 'Internal server error, could not get all properties';
@@ -203,40 +224,50 @@ const removeProperty = async (id, emailId) => {
 
     const studentCollection = await students();
     const studentData = await studentCollection.find({}).toArray();
-    let emailIdArr, favouritesArr;
-    for(let i = 0; i<studentData.length; i++) {
-        favouritesArr.push(studentData[i].favourites);
-        emailIdArr.push(studentData[i].emailId);
-    }
-    for(let i = 0; i<favouritesArr.length; i++) {
-        for(let j = 0; j<favouritesArr[i].length; j++) {
-            if(favouritesArr[i][j].toString() == id) {
-                favouritesArr[i][j].splice(j, 1);
-
-                let studentUpdateInfo = {
-                    favourites: favouritesArr[i]
-                }
-            
-                const studentUpdatedInfo = await studentCollection.updateOne(
-                    {emailId: emailIdArr[i]},
-                    {$set: studentUpdateInfo}
-                );
-            
-                if (studentUpdatedInfo.modifiedCount === 0) {
-                    throw 'Could not update the owner profile';
-                }
+    if(studentData.length>0){
+        studentData.forEach(studentuser=>{
+            if(studentuser.favourites.length>0){
+                studentuser.favourites.forEach(async favId=>{
+                    if(favId===id){
+                        const updatedInfo = await studentCollection.updateOne({
+                            emailId:studentuser.emailId
+                        },{
+                            $pull:{favourites:favId}
+                        });
+                        if (updatedInfo.modifiedCount === 0) {
+                            throw 'Error : could not delete image';
+                        }  
+                    }
+                })
             }
-        }
+        })
     }
 }
 
-const createComment = async (id, comment) => {
-    id = validate.checkId(id);
+const removePropertybyEmail = async (emailId) => {
+    validate.validateEmail(emailId);
+    const propertyCollection = await properties();
+    const deletionInfo = await propertyCollection.deleteOne({emailId: emailId});
 
+    if(deletionInfo.deletedCount === 0) {
+        throw `Could not delete property with email of ${emailId}`
+    }
+}
+
+const createComment = async (id,emailId,firstName,lastName, comment) => {
+    id = validate.checkId(id);
+    emailId = validate.checkEmail(emailId);
+    let fullName = validate.validateFullName(firstName,lastName);
     comment = validate.checkComment(comment);
+    let today = new Date();
+    let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     const propertyCollection = await properties();
     let newUpdate = {
         _id: new ObjectId(),
+        dateTime:date+" "+time,
+        fullName,
+        emailId:emailId,
         comment
     }
     const updatedInfo = await propertyCollection.updateOne(
@@ -283,14 +314,43 @@ const searchProp = async (search) => {
         if (!search) throw new Error('You must provide text to search');    
         if (typeof search !== 'string') throw new TypeError('search must be a string');
 
-        let Prop = search.toLowerCase();
+        let prop = search.toLowerCase();
+        var regex = new RegExp([".*", prop, ".*"].join(""), "i");
         const propertyCollection = await properties();
-        const searchPropresults = await propertyCollection.find({address: { $regex: Prop } }, {description: { $regex: Prop } }).toArray();
-        //console.log(searchPropresults);
+        const searchPropresults = await propertyCollection.find({ $or: [{ "address": regex }, { "description": regex }, { "laundry": regex },{ "dateListed": regex }, {"rent": regex},{ "listedBy": regex },{ "emailId": regex }, { "bed": regex }, { "bath": regex }, {"distance": regex}] }).toArray();
+
         return searchPropresults;
     } catch (err) {
         throw err;
     }
+}
+
+const deleteImage = async (id) => {
+    id=validate.checkId(id);
+    id=id.toString();    
+    const propertyCollection = await properties();
+    const propList = await propertyCollection.find({}).toArray();
+    let propId;
+    propList.forEach(prop=>{
+        prop.images.forEach(img=>{
+            img._id=img._id.toString();
+            if(id===img._id){
+                propId=prop._id;
+            }
+        })
+    })
+    if(!propId){
+        throw "Error : no such image exists";
+    }
+    const updatedInfo = await propertyCollection.updateOne({
+        _id:ObjectId(propId)
+    },{
+        $pull:{images:{_id:ObjectId(id)}}
+    });
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'Error : could not delete image';
+    }
+    return propId.toString();
 }
 
 module.exports={
@@ -300,6 +360,8 @@ module.exports={
     getAllPropertiesByUser,
     createComment,
     removeProperty,
-    getSortedData
-    searchProp
+    searchProp,
+    removePropertybyEmail,
+    getSortedData,
+    deleteImage
 }

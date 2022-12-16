@@ -1,20 +1,11 @@
-{{!-- 
-    This page will be called when the user clicks on a property shown in the properties page.
-    This page will display a single property that the user clicked on.  
-    Also display all the comments that the property has.
-    All the property info is stored in the variable named data. So do data.<whatever you want> eg: data.address, etc.
- --}}
+<main>   
+    <div class="ownerLinks">  
+      <a href="/owners/properties-list" id="ownerElement2">My Properties</a>
+      <a href="/sign-out">Sign-out</a>
+   </div>
+   <p>{{msg}}</p>
 
-
-<main>
-    <div class="studentLinks">  
-        <a href="/properties">Properties</a> <br>
-        <a href="/students/favourites-list" id="studentElement2">My favourites</a> <br>
-        <a href="/sign-out">Sign-out</a>
-        <br>
-        <br>
-    </div>
-    <div>
+   <div>
       <div class="row">
       {{#each data.images}}
          <div class="col-md-1 text-center">
@@ -23,6 +14,7 @@
       {{/each}}
       </div>
    </div>
+   
     <dl>
         <dt>Address:</dt>
         <dd>{{data.address}}</dd>
@@ -51,6 +43,11 @@
         <dt>Bath:</dt>
         <dd>{{data.bath}} Bathroom</dd>
     </dl>
+
+    <form action="/properties/editProperty/{{data._id}}" method="get">
+        <label for="updatePropBtn"></label>
+        <button type="submit" id="updatePropBtn" class="btn btn-primary">Update Property</button>
+    </form>
 
     <div class="mt-5">
       <h2>Comment Section</h2>
@@ -84,16 +81,5 @@
         </div>
     </div>
 <br>
-    <form id="addToFavourites" method="POST" action="/students/favourites-list/{{id}}">
-        <button class="FavouriteButton" id ="favouritesButton" type="submit"> Add to favorites </button>
-    </form>
-    
-    {{!-- "favourites(\'' + {{emailId}} + '\' , \''+ {{id}} + '\')" --}}
-    {{!-- <input onclick="favourites(\'' + {{emailId}} + '\',\'' + {{id}} + '\')" type="button" value="Add to fav" id="favouritesButton"></input> --}}
-    {{!-- <input onclick="favourites()" id="favouritesButton" type="button" value="Add to fav"></input> --}}
-
-    <br> 
-    <a href="/properties/">Make another search</a>
 
 </main>
-<script src="/public/extra.js"></script>
