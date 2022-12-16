@@ -1,8 +1,9 @@
 const mongoCollections = require('../config/mongoCollections');
 const propertyData = require('./properties');
-const studentData = require('./students');
+//const studentData = require('./students');
 const properties = mongoCollections.properties;
 const owners = mongoCollections.owners;
+const students = mongoCollections.students;
 const validate = require("../helpers");
 const bcrypt = require('bcryptjs');
 const cloudinary = require('../config/cloudinary');
@@ -133,19 +134,17 @@ const updateOwnerDetails = async (emailId, firstName, lastName, contact, gender,
 const deleteOwner = async (emailId) => {
 
   validate.validateEmail(emailId);
+
   const ownerCollection = await owners();
+
+  let owner = await getOwnerByEmail(emailId);
+  let ownerProp = owner.properties;
+
+  for(i=0;i<ownerProp.length;i++){
+    await propertyData.removeProperty(ownerProp[i], emailId);
+  }
+
   const removeInfo = await ownerCollection.deleteOne({emailId: emailId});
-
-  //if owner deleted then Delete property from students favourites too --- not done
-  // let allProp = propertyData.getAllProperties();
-  // let userPropId = []
-  // for(let i = 0; i<allProp.length; i++) {
-  //   if(allProp[i].emailId === emailId)
-  //     userPropId.push(allProp[i]._id.toString());
-  // }
-
-  // studentData.removeFavouritePropertiesById(userPropId);
-  propertyData.removePropertybyEmail(emailId);
 
   if (removeInfo.deletedCount === 0) {
     throw `Could not delete the Owner`;

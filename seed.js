@@ -12,26 +12,26 @@ const main = async () => {
   //   console.log(e);
   // }
 
-  try {
-    const owner = await index.owner.createUser("sam123@gmail.com","Sam@123","Sam","Adams","5512468888","M","Hoboken","NJ","39");
-    console.log(owner);
-  } catch (e) {
-    console.log(e);
-  }
+  // try {
+  //   const owner = await index.owner.createUser("sam123@gmail.com","Sam@123","Sam","Adams","5512468888","M","Hoboken","NJ","39");
+  //   console.log(owner);
+  // } catch (e) {
+  //   console.log(e);
+  // }
 
-  try {
-    const owner = await index.student.createUser("sam123@gmail.com","Sam@123","Sam","Briskoff","4811184222","M","Hoboken","NJ","18");
-    console.log(owner);
-  } catch (e) {
-    console.log(e);
-  }
+  // try {
+  //   const owner = await index.student.createUser("sam123@gmail.com","Sam@123","Sam","Briskoff","4811184222","M","Hoboken","NJ","18");
+  //   console.log(owner);
+  // } catch (e) {
+  //   console.log(e);
+  // }
 
-  try {
-    const movie = await index.student.checkUser("sam123@gmail.com","Sam@123");
-    console.log(movie);
-  } catch (e) {
-    console.log(e);
-  }
+  // try {
+  //   const movie = await index.student.checkUser("sam123@gmail.com","Sam@123");
+  //   console.log(movie);
+  // } catch (e) {
+  //   console.log(e);
+  // }
 
 
   // try {
@@ -54,12 +54,12 @@ const main = async () => {
   // } catch (e) {
   //   console.log(e);
   // }
-  try {
-    const movie = await index.properties.createProperty("226 madison st, Hoboken, NJ, 07030","a beautiful 4 bedroom house","not included","5000","Sanjan","david123@gmail.com","2000","4","2");
-    console.log(movie);
-  } catch (e) {
-    console.log(e);
-  }
+  // try {
+  //   const movie = await index.properties.createProperty("216 Palisade Ave, Jersey City, NJ, 07030","a beautiful 2 bedroom house","not included",1500,"John","john123@gmail.com","1000","2","1","1.2");
+  //   console.log(movie);
+  // } catch (e) {
+  //   console.log(e);
+  // }
   // try {
   //   const property = await index.properties.createProperty("296 Park Avenue, Hoboken, NJ, 07030","a beautiful 3 bedroom 2 bathroom house","not included","2000","John","john123@gmail.com","1000","3","2");
   //   console.log(property);
@@ -127,15 +127,15 @@ const main = async () => {
   //   console.log(e);
   // }
 
-try{
-  const owner = await index.properties.searchProp('washington');
-  console.log(owner);
-} catch(e){
-  console.log(e);
-}
+// try{
+//   const owner = await index.student.removeFavouritePropertiesById('639baf2c6cf7a61986f47c46');
+//   console.log(owner);
+// } catch(e){
+//   console.log(e);
+// }
 
 // try{
-//   const property = await index.properties.deleteImage("639a93e184e7dd280a7ad58f");
+//   const property = await index.owner.deleteOwner("alexia@gmail.com");
 //   console.log(property);
 // } catch(e){
 //   console.log(e);
