@@ -245,6 +245,26 @@ function checkEmail(email){
       if(!((/^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/).test(email.trim()))){
         throw "Invalid email";
       }
+      return email.trim();
+}
+
+function validateFullName(firstName,lastName){
+    if(!lastName ||!firstName){
+        throw "Input not provided";
+    }
+    if(typeof firstName!=='string'|| typeof lastName!=='string'){
+        throw "Input must be string";
+    }
+    if(firstName.trim().length==0|| lastName.trim().length==0){
+        throw "Input cannot be Empty spaces";
+    }
+    if(!((/^[a-zA-Z]{2,}$/).test(firstName.trim()))){
+        throw "only letters in firstname, min two characters";
+    }
+    if(!((/^[a-zA-Z]{2,}$/).test(lastName.trim()))){
+        throw "only letters in lastname, min two characters";
+    }
+    return firstName+" "+lastName;
 }
 
 module.exports = {
@@ -257,6 +277,7 @@ module.exports = {
     validateUpdate,
     validateArray,
     getDistanceFromLatLonInMi,
-    checkEmail
+    checkEmail,
+    validateFullName
 }
 

@@ -254,13 +254,20 @@ const removePropertybyEmail = async (emailId) => {
     }
 }
 
-const createComment = async (id, comment) => {
+const createComment = async (id,emailId,firstName,lastName, comment) => {
     id = validate.checkId(id);
-
+    emailId = validate.checkEmail(emailId);
+    let fullName = validate.validateFullName(firstName,lastName);
     comment = validate.checkComment(comment);
+    let today = new Date();
+    let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     const propertyCollection = await properties();
     let newUpdate = {
         _id: new ObjectId(),
+        dateTime:date+" "+time,
+        fullName,
+        emailId:emailId,
         comment
     }
     const updatedInfo = await propertyCollection.updateOne(
