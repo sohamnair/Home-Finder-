@@ -130,6 +130,24 @@ router.route('/createProperty')
     }
 })
 
+router.route('/viewProperty/:id')
+.get(async (req, res) => {
+    try {
+        if (!req.session.user) {
+            res.redirect('/sign-in');
+        } 
+        else {
+            let id = req.params.id;
+            validate.checkId(id);
+            let data = await index.properties.getPropertyById(id);
+
+            return res.render('./owner_property_page', {title: "Property", data: data});
+        }
+    }catch(e) {
+        return res.status(404).render('./error_page', {title: "Error", error: e});
+    }
+})
+
 router.route('/editProperty/:id')
 .get(async (req, res) => {
     try {
