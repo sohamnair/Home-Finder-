@@ -23,4 +23,17 @@ if(signInForm) {
             loginUserError.hidden = false;
         }
     })
+
+    loginEmail.addEventListener('input', ()=>{
+        loginEmailError.hidden=true;
+    })
+    loginPassword.addEventListener('input', ()=>{
+        loginPasswordError.hidden=true;
+    })
+    loginStudent.addEventListener('click', ()=>{
+        loginUserError.hidden = true;
+    })
+    loginOwner.addEventListener('click', ()=>{
+        loginUserError.hidden = true;
+    })
 }
