@@ -15,12 +15,25 @@ if(signInForm) {
             loginEmailError.hidden = true;
             loginPasswordError.hidden = true;
             loginUserError.hidden = true;
-            signInForm.submit();
+            signInForm.unbind().submit();
         } else {
             event.preventDefault();
             loginEmailError.hidden = loginEmail.value;
             loginPasswordError.hidden = loginPassword.value;
             loginUserError.hidden = false;
         }
+    })
+
+    loginEmail.addEventListener('input', ()=>{
+        loginEmailError.hidden=true;
+    })
+    loginPassword.addEventListener('input', ()=>{
+        loginPasswordError.hidden=true;
+    })
+    loginStudent.addEventListener('click', ()=>{
+        loginUserError.hidden = true;
+    })
+    loginOwner.addEventListener('click', ()=>{
+        loginUserError.hidden = true;
     })
 }

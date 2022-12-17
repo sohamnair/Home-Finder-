@@ -9,8 +9,7 @@ const gender = document.getElementById("gender");
 const city = document.getElementById("city");
 const state = document.getElementById("state");
 const age = document.getElementById("age");
-const student = document.getElementById('student');
-const owner = document.getElementById('owner');
+const userType = document.getElementsByName('userType');
 
 const firstNameError = document.getElementById("no-first-name");
 const lastNameError = document.getElementById("no-last-name");
@@ -26,9 +25,16 @@ const userError = document.getElementById('no-type')
 
 if(signUpForm){
     signUpForm.addEventListener("submit", (event) => {
+        var checked = false;
+        for (var i = 0; i < userType.length; i++) {
+            if (userType[i].checked) {
+                checked = true;
+                break;
+            }
+        }
         if(firstName.value && lastName.value && email.value && password.value &&
             contact.value && gender.value && city.value && state.value && age.value && 
-            student.value && owner.value) {
+            checked) {
                 firstNameError.value = true;
                 lastNameError.value = true;
                 emailError.value = true;
@@ -39,7 +45,7 @@ if(signUpForm){
                 stateError.value = true;
                 ageError.value = true;
                 userError.value = true;
-                signInForm.submit(); 
+                signUpForm.unbind().submit(); 
         }
         else{
             event.preventDefault();
@@ -52,8 +58,33 @@ if(signUpForm){
             cityError.hidden = city.value;
             stateError .hidden = state.value;
             ageError.hidden = age.value;
-            userError.hidden = false;
+            userError.hidden = checked;
         }
     })
+    email.addEventListener('input', ()=>{
+        emailError.hidden=true;
+    })
+    password.addEventListener('input', ()=>{
+        passwordError.hidden=true;
+    })
+    firstName.addEventListener('input', ()=>{
+        firstNameError.hidden=true;
+    })
+    contact.addEventListener('input', ()=>{
+        contactError.hidden=true;
+    })
+    gender.addEventListener('input', ()=>{
+        genderError.hidden=true;
+    })
+    city.addEventListener('input', ()=>{
+        cityError.hidden=true;
+    })
+    state.addEventListener('input', ()=>{
+        stateError.hidden=true;
+    })
+    age.addEventListener('input', ()=>{
+        ageError.hidden=true;
+    })
+
 }
 else{}
