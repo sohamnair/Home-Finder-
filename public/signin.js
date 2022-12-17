@@ -15,7 +15,7 @@ if(signInForm) {
             loginEmailError.hidden = true;
             loginPasswordError.hidden = true;
             loginUserError.hidden = true;
-            signInForm.submit();
+            signInForm.unbind().submit();
         } else {
             event.preventDefault();
             loginEmailError.hidden = loginEmail.value;

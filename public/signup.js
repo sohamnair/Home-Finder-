@@ -45,7 +45,7 @@ if(signUpForm){
                 stateError.value = true;
                 ageError.value = true;
                 userError.value = true;
-                signUpForm.submit(); 
+                signUpForm.unbind().submit(); 
         }
         else{
             event.preventDefault();
