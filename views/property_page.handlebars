@@ -1,12 +1,5 @@
-{{!-- 
-    This page will be called when the user clicks on a property shown in the properties page.
-    This page will display a single property that the user clicked on.  
-    Also display all the comments that the property has.
-    All the property info is stored in the variable named data. So do data.<whatever you want> eg: data.address, etc.
- --}}
-
-
-<main>
+<main id="whole-page">
+    <h2>Property</h2>
     <div class="studentLinks">  
         <a href="/properties">Properties</a> <br>
         <a href="/students/favourites-list" id="studentElement2">My favourites</a> <br>
@@ -34,7 +27,7 @@
         <dd>{{data.laundry}}</dd>
 
         <dt>Rent:</dt>
-        <dd>${{data.rent}}</dd>
+        <dd>{{data.rent}}</dd>
 
         <dt>Listed By:</dt>
         <dd>{{data.listedBy}}</dd>
@@ -43,13 +36,13 @@
         <dd>{{data.emailId}}</dd>
 
         <dt>Area:</dt>
-        <dd>{{data.area}}sqft</dd>
+        <dd>{{data.area}}</dd>
 
         <dt>Bed:</dt>
-        <dd>{{data.bed}} Bedroom</dd>
+        <dd>{{data.bed}}</dd>
 
         <dt>Bath:</dt>
-        <dd>{{data.bath}} Bathroom</dd>
+        <dd>{{data.bath}}</dd>
     </dl>
 
     <div class="mt-5">
@@ -67,9 +60,10 @@
                         </div>
                     </div>
                     {{/each}}
-                    <input type="hidden" name="user_id" id="user_id" value="{{data._id}}" />
-                    <form action='/properties/property/comments/{{data._id}}' method="POST" id="postComment">
+                    
+                    <form id="postComment">
                         <div class="bg-light p-2">
+                            <input type="hidden" name="user_id" id="user_id" value="{{data._id}}" />
                             <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" alt="User Icon" width="40">
                                 <label for="comment"></label>
                                 <textarea id="comment" name="comment" class="form-control ml-1 shadow-none textarea"></textarea>
@@ -81,18 +75,16 @@
                             <div id="empty-comment" hidden></div>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
 <br>
-    <form id="addToFavourites" method="POST" action="/students/favourites-list/{{id}}">
+
+   <form id="addToFavourites" method="POST" action="/students/favourites-list/{{id}}">
         <button class="FavouriteButton" id ="favouritesButton" type="submit"> Add to favorites </button>
     </form>
-    
-    {{!-- "favourites(\'' + {{emailId}} + '\' , \''+ {{id}} + '\')" --}}
-    {{!-- <input onclick="favourites(\'' + {{emailId}} + '\',\'' + {{id}} + '\')" type="button" value="Add to fav" id="favouritesButton"></input> --}}
-    {{!-- <input onclick="favourites()" id="favouritesButton" type="button" value="Add to fav"></input> --}}
 
     <br> 
     <a href="/properties/">Make another search</a>
