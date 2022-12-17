@@ -70,8 +70,18 @@ router.route('/property/:id/comments')
             let comment = req.body.comment;
             validate.checkId(id);
             validate.checkComment(comment);
-            await index.properties.createComment(id, comment);
-            res.redirect(`/properties/property/${id}`);
+            let emailId = req.session.user.emailId;
+            let firstName = req.session.user.firstName;
+            let lastName = req.session.user.lastName;
+            await index.properties.createComment(id,emailId,firstName,lastName,comment);
+            let data = await index.properties.getPropertyById(id);
+            if(req.session.user.userType==='student'){
+                res.render('./property_page', {title: "Property", data: data, emailId : req.session.user.emailId, id: id});
+                //res.redirect(`/properties/property/${id}`);
+            }
+            else{
+                res.redirect(`/properties/editProperty/${id}`);
+            }
         }
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});

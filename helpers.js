@@ -28,10 +28,10 @@ function validateRegistration(email,password,firstName,lastName,contact,gender,c
     if(!((/^(M|F)$/).test(gender.trim()))){
         throw "only letters in gender";
     }
-    if(!((/^[a-zA-Z]{4,}$/).test(city.trim()))){
+    if(!((/^[a-zA-Z ]{4,}$/).test(city.trim()))){
         throw "only letters in city, min four characters";
     }
-    if(!((/^[a-zA-Z]{2,}$/).test(state.trim()))){
+    if(!((/^[a-zA-Z ]{2,}$/).test(state.trim()))){
         throw "only letters in state, min two characters";
     }
     if(!((/^[0-9][0-9]$/).test(age.trim()))){
