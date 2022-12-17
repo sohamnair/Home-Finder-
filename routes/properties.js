@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const index = require('../data/index');
+const xss = require('xss');
 const validate =require('../helpers');
 const multer = require('multer');
 const upload = multer({});
@@ -77,13 +78,13 @@ router.route('/property/comments/:id')
             res.redirect('/sign-in');
         } 
         else {
-            let id = req.params.id;
-            let comment = req.body.comment;
+            let id = xss(req.params.id);
+            let comment = xss(req.body.comment);
             validate.checkId(id);
             validate.checkComment(comment);
-            let emailId = req.session.user.emailId;
-            let firstName = req.session.user.firstName;
-            let lastName = req.session.user.lastName;
+            let emailId = xss(req.session.user.emailId);
+            let firstName = xss(req.session.user.firstName);
+            let lastName = xss(req.session.user.lastName);
             await index.properties.createComment(id,emailId,firstName,lastName,comment);
             if(req.session.user.userType==='student'){
                 res.redirect(`/properties/property/${id}`);
@@ -122,15 +123,15 @@ router.route('/createProperty')
                 let url = "data:"+mime+";base64,"+base;
                 imageBuffer.push(url);
             }
-            let address = req.body.address;
-            let description = req.body.description;
-            let laundry = req.body.laundry;
-            let rent = req.body.rent;
-            let listedBy = req.session.user.firstName;
-            let emailId = req.session.user.emailId;
-            let area = req.body.area;
-            let bed = req.body.bed;
-            let bath = req.body.bath;
+            let address = xss(req.body.address);
+            let description = xss(req.body.description);
+            let laundry = xss(req.body.laundry);
+            let rent = xss(req.body.rent);
+            let listedBy = xss(req.session.user.firstName);
+            let emailId = xss(req.session.user.emailId);
+            let area = xss(req.body.area);
+            let bed = xss(req.body.bed);
+            let bath = xss(req.body.bath);
             
             validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
             await index.properties.createProperty(imageBuffer,address,description,laundry,rent,listedBy,emailId,area,bed,bath);
@@ -192,15 +193,15 @@ router.route('/editProperty/:id')
                 imageBuffer.push(url);
             }
         }
-        let address = req.body.address;
-        let description = req.body.description;
-        let laundry = req.body.laundry;
-        let rent = req.body.rent;
-        let listedBy = req.session.user.firstName;
-        let emailId = req.session.user.emailId;
-        let area = req.body.area;
-        let bed = req.body.bed;
-        let bath = req.body.bath;
+        let address = xss(req.body.address);
+        let description = xss(req.body.description);
+        let laundry = xss(req.body.laundry);
+        let rent = xss(req.body.rent);
+        let listedBy = xss(req.session.user.firstName);
+        let emailId = xss(req.session.user.emailId);
+        let area = xss(req.body.area);
+        let bed = xss(req.body.bed);
+        let bath = xss(req.body.bath);
         // console.log(req.files+" "+id+" "+address+" "+description+" "+laundry+" "+rent+" "+listedBy+" "+emailId+" "+area+" "+bed+" "+bath);
         validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
         await index.owner.editProp(id,imageBuffer,address,description,laundry,rent,listedBy,emailId,area,bed,bath);
