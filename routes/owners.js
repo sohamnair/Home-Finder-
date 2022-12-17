@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const index = require('../data/index');
-
+const xss = require('xss');
 const validate = require("../helpers");
 
 
@@ -18,14 +18,14 @@ router.route('/')
 })
 .post(async (req, res) => {
     try {
-        let emailId = req.body.emailIdInput;
-        let firstName = req.body.firstName;
-        let lastName = req.body.lastName;
-        let contact = req.body.contact;
-        let gender = req.body.gender;
-        let city = req.body.city;
-        let state = req.body.state;
-        let age = req.body.age;
+        let emailId = xss(req.body.emailIdInput);
+        let firstName = xss(req.body.firstName);
+        let lastName = xss(req.body.lastName);
+        let contact = xss(req.body.contact);
+        let gender = xss(req.body.gender);
+        let city = xss(req.body.city);
+        let state = xss(req.body.state);
+        let age = xss(req.body.age);
         
         validate.validateUpdate(emailId,firstName,lastName,contact,gender,city,state,age);
         emailId=emailId.trim().toLowerCase();
