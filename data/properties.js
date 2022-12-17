@@ -87,6 +87,16 @@ const createProperty = async (images,address, description, laundry, rent, listed
         return deg * (Math.PI/180)
         }
     //
+    const propertyCollection = await properties();
+    const propertyExist = await propertyCollection.findOne({
+        address: formattedAddress
+      });
+    if(propertyExist!=null || propertyExist!=undefined){
+        if(propertyExist.address===formattedAddress){
+            throw "Error : Property already exists";
+        }
+    }
+
     const newProperty={
         images:imageBuffer,
         address:formattedAddress,
@@ -102,7 +112,7 @@ const createProperty = async (images,address, description, laundry, rent, listed
         distance:distance,
         comments:[]
     }
-    const propertyCollection = await properties();
+    
     const insertInfo = await propertyCollection.insertOne(newProperty);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
         throw 'Error : Could not add property';
@@ -155,21 +165,11 @@ const getAllPropertiesByUser = async (idArray) => {
 const getPropertyById = async (id) => {
     id = validate.checkId(id);
     const propertyCollection = await properties();
-    const propertyList = await propertyCollection.find({}).toArray();
-    if (!propertyList) throw 'Error : Could not get all properties';
-    let obj = {};
-    let flag = false;
-    for(let i = 0; i<propertyList.length; i++) {
-        if(propertyList[i]._id.toString() == id) {
-            obj = propertyList[i];
-            flag = true;
-            break;
-        }
-    }
-
-    if(!flag) throw "No property with this ID found";
-
-    return obj;
+    const propertyExist = await propertyCollection.findOne({
+        _id: ObjectId(id)
+      });
+    if(!propertyExist) throw "No property with this ID found";
+    return propertyExist;
 }
 
 const removeProperty = async (id, emailId) => {
