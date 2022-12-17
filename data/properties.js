@@ -276,7 +276,7 @@ const createComment = async (id,emailId,firstName,lastName, comment) => {
     );
 
     if (updatedInfo.modifiedCount === 0) {
-        throw 'Error : could not add property to owner collection';
+        throw 'Error : could not add comment to property collection';
     }
 }
 

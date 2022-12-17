@@ -29,7 +29,7 @@ function validateRegistration(email,password,firstName,lastName,contact,gender,c
         throw "only letters in gender";
     }
     if(!((/^[a-zA-Z ]{4,}$/).test(city.trim()))){
-        throw "only letters and space in city, min four characters";
+        throw "only letters in city, min four characters";
     }
     if(!((/^[a-zA-Z ]{2,}[, \.a-zA-z]*$/).test(state.trim()))){
         throw "only letters, spaces, comma and dot in state, min two characters";
