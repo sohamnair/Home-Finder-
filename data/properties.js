@@ -254,13 +254,20 @@ const removePropertybyEmail = async (emailId) => {
     }
 }
 
-const createComment = async (id, comment) => {
+const createComment = async (id,emailId,firstName,lastName, comment) => {
     id = validate.checkId(id);
-
+    emailId = validate.checkEmail(emailId);
+    let fullName = validate.validateFullName(firstName,lastName);
     comment = validate.checkComment(comment);
+    let today = new Date();
+    let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     const propertyCollection = await properties();
     let newUpdate = {
         _id: new ObjectId(),
+        dateTime:date+" "+time,
+        fullName,
+        emailId:emailId,
         comment
     }
     const updatedInfo = await propertyCollection.updateOne(
@@ -273,9 +280,16 @@ const createComment = async (id, comment) => {
     }
 }
 
+let sorted = [];
+let last = [false, false];
 const getSortedData = async (txt) => {
-    let tempData = await getAllProperties();
-    let sorted = [];
+    let tempData;
+    if(last[0] == true && sorted.length != 0 && txt != "0")  tempData = sorted;
+    else {
+        tempData = await getAllProperties();
+        last = [false, false];
+    }
+    sorted = [];
     if(txt == "1") {
         sorted = tempData.sort(function (a, b) {
             return a.rent - b.rent;
@@ -296,9 +310,29 @@ const getSortedData = async (txt) => {
             return b.distance -  a.distance;
         });
     }
-    else if(txt == "0") {
-        sorted = tempData
+    else {
+        sorted = tempData;
     }
+    if(sorted.length != 0) last[1] = true;
+    else last[1] = false;
+    return sorted;
+}
+
+const getBedBath = async (bedVal, bathVal) => {
+    let tempData;
+    if(last[0] != true && last[1] == true && sorted.length != 0)  tempData = sorted;
+    else {
+        tempData = await getAllProperties();
+        last = [false, false];
+    }
+    sorted = [];
+    for(let i = 0; i<tempData.length; i++) {
+        if(tempData[i].bed == bedVal && tempData[i].bath == bathVal) {
+            sorted.push(tempData[i]);
+        }
+    }
+    if(sorted.length != 0) last[0] = true;
+    else last[0] = false;
     return sorted;
 }
 
@@ -356,5 +390,6 @@ module.exports={
     searchProp,
     removePropertybyEmail,
     getSortedData,
-    deleteImage
+    deleteImage,
+    getBedBath
 }

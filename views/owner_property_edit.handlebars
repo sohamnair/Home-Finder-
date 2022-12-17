@@ -15,7 +15,7 @@
       {{/each}}
       </div>
    </div>
-
+   <br>
    <form method="POST" action="/properties/editProperty/{{data._id}}" enctype="multipart/form-data">
    
       <div class="row mb-3">
@@ -106,6 +106,8 @@
 
 
       <input type="submit" class="btn btn-primary" value="Update">
+      <a href="/properties/viewProperty/{{data._id}}"><button type="button" class="btn btn-outline-dark">Cancel</button></a>
+      <a href="/properties/deleteProperty/{{data._id}}"><button type="button" class="btn btn-outline-danger">Delete Property</button></a>
 
    </form>
 
@@ -145,5 +147,6 @@
 <br>
  </main>
 
-<script src="../public/autoComplete.js"></script>
+<script src="/public/extra.js"></script>
+<script src="/public/autoComplete.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8FReQh61YLuQP68YvmQveuU7dY3LVC9w&libraries=places&callback=initAutoComplete" async defer></script>

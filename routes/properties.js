@@ -28,7 +28,18 @@ router.route('/filter/:id')
             res.redirect('/sign-in');
         } 
         else {
-            let data = await index.properties.getSortedData(req.params.id);
+            let id = req.params.id;
+            let data;
+            if(id == "5") {
+                let bed = req.query['bed'], bath = req.query['bath'];
+                data = await index.properties.getBedBath(bed, bath);
+            }
+            else {
+                data = await index.properties.getSortedData(id);
+            }
+            // let id = req.params.id;
+            // let bed = req.query['bed'], bath = req.query['bath'];
+            // let data = await index.properties.getSortedData(id, bed, bath);
             res.render('./properties_page', {title: "All Properties", data: data, style: "/public/properties_page_style.css"});
         }
     }catch(e) {
@@ -59,7 +70,7 @@ router.route('/property/:id')
     }
 })
 
-router.route('/property/:id/comments')
+router.route('/property/comments/:id')
 .post(async (req, res) => {
     try {
         if (!req.session.user) {
@@ -74,10 +85,8 @@ router.route('/property/:id/comments')
             let firstName = req.session.user.firstName;
             let lastName = req.session.user.lastName;
             await index.properties.createComment(id,emailId,firstName,lastName,comment);
-            let data = await index.properties.getPropertyById(id);
             if(req.session.user.userType==='student'){
-                res.render('./property_page', {title: "Property", data: data, emailId : req.session.user.emailId, id: id});
-                //res.redirect(`/properties/property/${id}`);
+                res.redirect(`/properties/property/${id}`);
             }
             else{
                 res.redirect(`/properties/editProperty/${id}`);
@@ -126,6 +135,24 @@ router.route('/createProperty')
             validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
             await index.properties.createProperty(imageBuffer,address,description,laundry,rent,listedBy,emailId,area,bed,bath);
             res.redirect('/');
+        }
+    }catch(e) {
+        return res.status(404).render('./error_page', {title: "Error", error: e});
+    }
+})
+
+router.route('/viewProperty/:id')
+.get(async (req, res) => {
+    try {
+        if (!req.session.user) {
+            res.redirect('/sign-in');
+        } 
+        else {
+            let id = req.params.id;
+            validate.checkId(id);
+            let data = await index.properties.getPropertyById(id);
+
+            return res.render('./owner_property_page', {title: "Property", data: data});
         }
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});
