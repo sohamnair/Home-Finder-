@@ -6,7 +6,8 @@
  --}}
 
 
-<main>
+<main id="whole-page">
+    <h2>Property</h2>
     <div class="studentLinks">  
         <a href="/properties">Properties</a> <br>
         <a href="/students/favourites-list" id="studentElement2">My favourites</a> <br>
@@ -56,7 +57,7 @@
       <h2>Comment Section</h2>
         <div class="d-flex row">
             <div class="col-md-8">
-                <div class="d-flex flex-column comment-section">
+                <div class="d-flex flex-column comment-section" id="new-comments">
                     {{#each data.comments}}
                     <div class="bg-white p-2">
                         <div class="d-flex flex-row user-info"><img class="rounded-circle" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" alt="User Icon" width="40">
@@ -67,8 +68,10 @@
                         </div>
                     </div>
                     {{/each}}
-                    <form action='/properties/property/comments/{{data._id}}' method="POST" id="postComment">
+                    
+                    <form id="postComment">
                         <div class="bg-light p-2">
+                            <input type="hidden" name="user_id" id="user_id" value="{{data._id}}" />
                             <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" alt="User Icon" width="40">
                                 <label for="comment"></label>
                                 <textarea id="comment" name="comment" class="form-control ml-1 shadow-none textarea"></textarea>
@@ -77,8 +80,10 @@
                                 <button class="btn btn-primary btn-sm shadow-none" type="submit">Post comment</button>
                                 <button class="btn btn-danger btn-sm shadow-none" type="button" id="cancelButton">Cancel</button>
                             </div>
+                            <div id="empty-comment" hidden></div>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -88,10 +93,6 @@
     <form id="RemoveFromFavourites" method="POST" action="/students/remove-favourites-list/{{id}}">
         <button class="FavouriteButton" id ="removeFavouritesButton" type="submit"> Remove From favorites </button>
     </form>
-    
-    {{!-- "favourites(\'' + {{emailId}} + '\' , \''+ {{id}} + '\')" --}}
-    {{!-- <input onclick="favourites(\'' + {{emailId}} + '\',\'' + {{id}} + '\')" type="button" value="Add to fav" id="favouritesButton"></input> --}}
-    {{!-- <input onclick="favourites()" id="favouritesButton" type="button" value="Add to fav"></input> --}}
 
     <br> 
     <a href="/properties/">Make another search</a>

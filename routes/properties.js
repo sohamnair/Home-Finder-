@@ -59,10 +59,10 @@ router.route('/property/:id')
             let data = await index.properties.getPropertyById(id);
             let favourite = await index.student.checkFavourite(id,req.session.user.emailId);
             if(favourite){
-                return res.render('./favourite_property_page', {title: "Property", data: data, emailId : req.session.user.emailId, id: id});
+                return res.render('./favourite_property_page', {title: "", data: data, emailId : req.session.user.emailId, id: id});
             }
             else{
-                return res.render('./property_page', {title: "Property", data: data, emailId : req.session.user.emailId, id: id});
+                return res.render('./property_page', {title: "", data: data, emailId : req.session.user.emailId, id: id});
             }
         }
     }catch(e) {
@@ -77,7 +77,7 @@ router.route('/property/comments/:id')
             res.redirect('/sign-in');
         } 
         else {
-            let id = req.params.id;
+            let id = req.body.id;
             let comment = req.body.comment;
             validate.checkId(id);
             validate.checkComment(comment);
@@ -89,7 +89,7 @@ router.route('/property/comments/:id')
                 res.redirect(`/properties/property/${id}`);
             }
             else{
-                res.redirect(`/properties/editProperty/${id}`);
+                res.redirect(`/properties/viewProperty/${id}`);
             }
         }
     }catch(e) {
@@ -152,7 +152,7 @@ router.route('/viewProperty/:id')
             validate.checkId(id);
             let data = await index.properties.getPropertyById(id);
 
-            return res.render('./owner_property_page', {title: "Property", data: data});
+            return res.render('./owner_property_page', {title: "", data: data});
         }
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});
