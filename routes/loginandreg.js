@@ -24,7 +24,7 @@ router.route('/')
 router.route('/sign-in')
 .get(async (req, res) => {
     if (!req.session.user) {
-        return res.render('./sign-in_page', {title: "Sign-in Page"});
+        return res.render('./sign-in_page', {title: "HomeFinder"});
     } 
     else {
         if(req.session.user.userType=='student'){
@@ -66,7 +66,7 @@ router.route('/sign-in')
 router.route('/sign-up')
 .get(async (req, res) => {
     if (!req.session.user) {
-        return res.render('./sign-up_page', {title: "Sign-up Form"});
+        return res.render('./sign-up_page', {title: "HomeFinder"});
     } 
     else {
         if(req.session.user.userType=='student'){
