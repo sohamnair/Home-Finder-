@@ -28,7 +28,18 @@ router.route('/filter/:id')
             res.redirect('/sign-in');
         } 
         else {
-            let data = await index.properties.getSortedData(req.params.id);
+            let id = req.params.id;
+            let data;
+            if(id == "5") {
+                let bed = req.query['bed'], bath = req.query['bath'];
+                data = await index.properties.getBedBath(bed, bath);
+            }
+            else {
+                data = await index.properties.getSortedData(id);
+            }
+            // let id = req.params.id;
+            // let bed = req.query['bed'], bath = req.query['bath'];
+            // let data = await index.properties.getSortedData(id, bed, bath);
             res.render('./properties_page', {title: "All Properties", data: data, style: "/public/properties_page_style.css"});
         }
     }catch(e) {
