@@ -146,6 +146,7 @@ const getAllProperties = async () => {
     const propertyCollection = await properties();
     const propertyList = await propertyCollection.find({}).toArray();
     if (!propertyList) throw 'Internal server error, could not get all properties';
+    last = [false, false];
     return propertyList;
 }
 
