@@ -29,7 +29,7 @@ router.route('/filter/:id')
             res.redirect('/sign-in');
         } 
         else {
-            let id = req.params.id;
+            let id = xss(req.params.id);
             let data;
             if(id == "5") {
                 let bed = req.query['bed'], bath = req.query['bath'];
@@ -55,7 +55,7 @@ router.route('/property/:id')
             res.redirect('/sign-in');
         } 
         else {
-            let id = req.params.id;
+            let id = xss(req.params.id);
             validate.checkId(id);
             let data = await index.properties.getPropertyById(id);
             let favourite = await index.student.checkFavourite(id,req.session.user.emailId);
@@ -149,7 +149,7 @@ router.route('/viewProperty/:id')
             res.redirect('/sign-in');
         } 
         else {
-            let id = req.params.id;
+            let id = xss(req.params.id);
             validate.checkId(id);
             let data = await index.properties.getPropertyById(id);
 
@@ -167,7 +167,7 @@ router.route('/editProperty/:id')
             res.redirect('/sign-in');
         } 
         else {
-            let id = req.params.id;
+            let id = xss(req.params.id);
             validate.checkId(id);
             let data = await index.properties.getPropertyById(id);
 
@@ -178,7 +178,7 @@ router.route('/editProperty/:id')
     }
 })
 .post(upload.array('images'),async (req, res) => {
-    let id = req.params.id;
+    let id = xss(req.params.id);
     try {
         id = validate.checkId(id);
         let imageBuffer=[];
@@ -214,7 +214,7 @@ router.route('/editProperty/:id')
 
 router.route('/deleteProperty/:id')
 .get(async (req, res) => {
-    let id = req.params.id;
+    let id = xss(req.params.id);
     try {
         if (!req.session.user) {
             res.redirect('/sign-in');
@@ -231,7 +231,7 @@ router.route('/deleteProperty/:id')
 
 router.route('/deleteImage/:id')
 .get(async (req, res) => {
-    let id = req.params.id;
+    let id = xss(req.params.id);
     try {
         if (!req.session.user) {
             res.redirect('/sign-in');

@@ -44,7 +44,7 @@ router.route('/')
         //let data = await index.student.getStudentByEmail(emailId); 
         return res.render('./student_profile_page', {title: "Profile",head:"Profile", data: data, msg: "Profile updated successfully"});
     }catch(e) {
-        let data = await index.student.getStudentByEmail(req.body.emailIdInput); 
+        let data = await index.student.getStudentByEmail(xss(req.body.emailIdInput)); 
         res.status(404).render('./student_profile_page', {title: "Profile",head:"Profile", data: data, msg: "Profile updated failed", error: e})
 
     }

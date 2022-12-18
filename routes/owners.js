@@ -43,7 +43,7 @@ router.route('/')
         
         return res.render('./owner_profile_page', {title: "Profile",head:"Profile", data: data, msg: "Profile updated successfully"});
     }catch(e) {
-        let data = await index.owner.getOwnerByEmail(req.body.emailIdInput);
+        let data = await index.owner.getOwnerByEmail(xss(req.body.emailIdInput));
         res.status(404).render('./owner_profile_page', {title: "Profile",head:"Profile", data: data, msg: "Profile update failed", error: e})
     }
 })
