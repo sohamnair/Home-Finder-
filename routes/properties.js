@@ -38,9 +38,6 @@ router.route('/filter/:id')
             else {
                 data = await index.properties.getSortedData(id);
             }
-            // let id = req.params.id;
-            // let bed = req.query['bed'], bath = req.query['bath'];
-            // let data = await index.properties.getSortedData(id, bed, bath);
             res.render('./properties_page', {title: "All Properties",head:"All Properties", data: data, style: "/public/properties_page_style.css"});
         }
     }catch(e) {
@@ -202,7 +199,6 @@ router.route('/editProperty/:id')
         let area = xss(req.body.area);
         let bed = xss(req.body.bed);
         let bath = xss(req.body.bath);
-        // console.log(req.files+" "+id+" "+address+" "+description+" "+laundry+" "+rent+" "+listedBy+" "+emailId+" "+area+" "+bed+" "+bath);
         validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
         await index.owner.editProp(id,imageBuffer,address,description,laundry,rent,listedBy,emailId,area,bed,bath);
         let data = await index.properties.getPropertyById(id);

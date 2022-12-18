@@ -1,9 +1,9 @@
 const express = require('express');
-//const { student } = require('../data/index');
 const router = express.Router();
 const index = require('../data/index');
 const validate = require("../helpers");
 const xss = require('xss');
+
 router.route('/')
 .get(async (req, res) => {
     if (!req.session.user) {
@@ -29,7 +29,6 @@ router.route('/')
         
         validate.validateUpdate(emailId,firstName,lastName,contact,gender,city,state,age);
         emailId=emailId.trim().toLowerCase();
-        //password=password.trim();
         firstName=firstName.trim();
         lastName=lastName.trim();
         contact=contact.trim();
@@ -59,7 +58,6 @@ router.route('/favourites-list')
     else {
         let emailId = req.session.user.emailId;
         let response = await index.student.getStudentByEmail(emailId); 
-        //console.log(response.favourites);
 
         if(!response.favourites || response.favourites.length == 0) {
             return res.render('./student_properties_empty_list_page', {title: "No favourites found",head:"No favourites found"});
@@ -74,15 +72,11 @@ router.route('/favourites-list')
 router.post('/favourites-list/:id', 
     async(req, res) => {
         try{
-            //console.log(req.session.user.emailId);
             await index.student.addFavouriteProperty(xss(req.session.user.emailId), xss(req.params.id));
-            // console.log('Added to favs!');
             return res.redirect(`/properties/property/${req.params.id}`);
 
         } catch(e) {
-            // console.log('not added to favs');
             return res.status(404).render('./error_page', {title: "Error", error1: e});
-
         }
     }
 );
@@ -90,18 +84,25 @@ router.post('/favourites-list/:id',
 router.post('/remove-favourites-list/:id', 
     async(req, res) => {
         try{
-            //console.log(req.session.user.emailId);
             await index.student.removeFavouriteProperty(xss(req.session.user.emailId), xss(req.params.id));
-            // console.log('Added to favs!');
             return res.redirect(`/properties/property/${req.params.id}`);
 
-
         } catch(e) {
-            // console.log('not added to favs');
             return res.status(404).render('./error_page', {title: "Error", error1: e});
-
         }
     }
 );
+
+router.route('/delete-student')
+.post(async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/sign-in');
+    } 
+    else {
+        await index.student.deleteStudent(req.session.user.emailId);
+        req.session.destroy();
+        res.redirect('/sign-in');
+    }
+})
 
 module.exports = router;

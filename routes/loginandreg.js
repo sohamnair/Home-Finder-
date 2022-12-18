@@ -17,8 +17,6 @@ router.route('/')
             res.redirect('/owners/properties-list');
         }
     }
-
-    // res.redirect('/properties');
 })
 
 router.route('/sign-in')
@@ -34,8 +32,6 @@ router.route('/sign-in')
             res.redirect('/owners/properties-list');
         }
     }
-
-    // return res.render('./sign-in_page', {title: "Sign-in Page"});
 })
 .post(async (req, res) => {
     try {
@@ -76,8 +72,6 @@ router.route('/sign-up')
             res.redirect('/owners/properties-list');
         } 
     }
-
-    // return res.render('./sign-up_page', {title: "Sign-up Form"});
 })
 .post(async (req, res) => {
     try {

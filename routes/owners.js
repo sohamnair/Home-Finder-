@@ -67,4 +67,16 @@ router.route('/properties-list')
     }
 })
 
+router.route('/delete-owner')
+.post(async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/sign-in');
+    } 
+    else {
+        await index.owner.deleteOwner(req.session.user.emailId);
+        req.session.destroy();
+        res.redirect('/sign-in');
+    }
+})
+
 module.exports = router;

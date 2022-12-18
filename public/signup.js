@@ -87,4 +87,3 @@ if(signUpForm){
     })
 
 }
-else{}

@@ -109,16 +109,12 @@ const updateStudentDetails = async (oldEmailId,emailId, firstName, lastName, con
   state=state.trim();
   age=age.trim();
 
-  //let hash = await bcrypt.hash(password, saltRounds);
-
   let oldStudent = await getStudentByEmail(oldEmailId);
   let favourites = oldStudent.favourites;
 
   const updatedStudent = {
     emailId: emailId,
-
-    hashedPassword: oldStudent.hashedPassword, //hash password
-
+    hashedPassword: oldStudent.hashedPassword, 
     firstName: firstName,
     lastName: lastName,
     contact: contact,

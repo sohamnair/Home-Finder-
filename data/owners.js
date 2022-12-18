@@ -1,6 +1,5 @@
 const mongoCollections = require('../config/mongoCollections');
 const propertyData = require('./properties');
-//const studentData = require('./students');
 const properties = mongoCollections.properties;
 const owners = mongoCollections.owners;
 const students = mongoCollections.students;
@@ -10,7 +9,6 @@ const cloudinary = require('../config/cloudinary');
 const { ObjectId } = require('mongodb');
 const axios = require('axios');
 require("dotenv/config");
-//const { properties } = require('../config/mongoCollections');
 const saltRounds = 10;
 
 const createUser = async (emailId, password, firstName, lastName, contact, gender, city, state, age) => {
@@ -99,7 +97,6 @@ const getOwnerByEmail = async (emailId) => {
 }
 
 const updateOwnerDetails = async (oldEmailId,emailId, firstName, lastName, contact, gender, city, state, age) => {
-    // we are using emailid to uniquely identify a user to use that while updating user data
     validate,validate.checkEmail(oldEmailId);
     validate.validateUpdate(emailId,firstName,lastName,contact,gender,city,state,age);
     emailId=emailId.trim().toLowerCase();
@@ -136,23 +133,24 @@ const updateOwnerDetails = async (oldEmailId,emailId, firstName, lastName, conta
   if (ownerUpdatedInfo.modifiedCount === 0) {
     throw 'Could not update the owner profile';
   }
-
-  const updateProperty={
-    listedBy:firstName,
-    emailId:emailId
-  }
-
-  const propertyCollection = await properties();
-  propertiesArr.forEach(async id => {
-    const propertyUpdatedInfo = await propertyCollection.updateOne(
-      {_id: ObjectId(id)},
-      {$set: updateProperty}
-    );
-
-    if (propertyUpdatedInfo.modifiedCount === 0) {
-      throw 'could not update the property';
+  if(oldEmailId.toLowerCase() != emailId.toLowerCase() || oldOwner.firstName.toLowerCase()!=firstName.toLowerCase()){
+    const updateProperty={
+      listedBy:firstName,
+      emailId:emailId
     }
-  });
+
+    const propertyCollection = await properties();
+    propertiesArr.forEach(async id => {
+      const propertyUpdatedInfo = await propertyCollection.updateOne(
+        {_id: ObjectId(id)},
+        {$set: updateProperty}
+      );
+
+      if (propertyUpdatedInfo.modifiedCount === 0) {
+        throw 'could not update the property';
+      }
+    });
+  }
 
   return await getOwnerByEmail(emailId);
 
