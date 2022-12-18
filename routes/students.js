@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const index = require('../data/index');
 const validate = require("../helpers");
-
+const xss = require('xss');
 router.route('/')
 .get(async (req, res) => {
     if (!req.session.user) {
@@ -17,14 +17,14 @@ router.route('/')
 })
 .post(async (req, res) => {
     try {
-        let emailId = req.body.emailIdInput;
-        let firstName = req.body.firstName;
-        let lastName = req.body.lastName;
-        let contact = req.body.contact;
-        let gender = req.body.gender;
-        let city = req.body.city;
-        let state = req.body.state;
-        let age = req.body.age;
+        let emailId = xss(req.body.emailIdInput);
+        let firstName = xss(req.body.firstName);
+        let lastName = xss(req.body.lastName);
+        let contact = xss(req.body.contact);
+        let gender = xss(req.body.gender);
+        let city = xss(req.body.city);
+        let state = xss(req.body.state);
+        let age = xss(req.body.age);
 
         
         validate.validateUpdate(emailId,firstName,lastName,contact,gender,city,state,age);
@@ -84,7 +84,7 @@ router.post('/favourites-list/:id',
     async(req, res) => {
         try{
             //console.log(req.session.user.emailId);
-            await index.student.addFavouriteProperty(req.session.user.emailId, req.params.id);
+            await index.student.addFavouriteProperty(xss(req.session.user.emailId), xss(req.params.id));
             // console.log('Added to favs!');
             return res.redirect(`/properties/property/${req.params.id}`);
 
@@ -100,7 +100,7 @@ router.post('/remove-favourites-list/:id',
     async(req, res) => {
         try{
             //console.log(req.session.user.emailId);
-            await index.student.removeFavouriteProperty(req.session.user.emailId, req.params.id);
+            await index.student.removeFavouriteProperty(xss(req.session.user.emailId), xss(req.params.id));
             // console.log('Added to favs!');
             return res.redirect(`/properties/property/${req.params.id}`);
 
