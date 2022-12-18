@@ -15,7 +15,7 @@ router.route('/')
         } 
         else {
             let data = await index.properties.getAllProperties();
-            res.render('./properties_page', {title: "All Properties", data: data, style: "/public/properties_page_style.css"});
+            res.render('./properties_page', {title: "All Properties",head:"All Properties", data: data, style: "/public/properties_page_style.css"});
         }
     }catch(e) {
         return res.status(500).render('./error_page', {title: "Error", error: e});
@@ -29,7 +29,7 @@ router.route('/filter/:id')
             res.redirect('/sign-in');
         } 
         else {
-            let id = req.params.id;
+            let id = xss(req.params.id);
             let data;
             if(id == "5") {
                 let bed = req.query['bed'], bath = req.query['bath'];
@@ -41,7 +41,7 @@ router.route('/filter/:id')
             // let id = req.params.id;
             // let bed = req.query['bed'], bath = req.query['bath'];
             // let data = await index.properties.getSortedData(id, bed, bath);
-            res.render('./properties_page', {title: "All Properties", data: data, style: "/public/properties_page_style.css"});
+            res.render('./properties_page', {title: "All Properties",head:"All Properties", data: data, style: "/public/properties_page_style.css"});
         }
     }catch(e) {
         return res.status(500).render('./error_page', {title: "Error", error: e});
@@ -55,15 +55,15 @@ router.route('/property/:id')
             res.redirect('/sign-in');
         } 
         else {
-            let id = req.params.id;
+            let id = xss(req.params.id);
             validate.checkId(id);
             let data = await index.properties.getPropertyById(id);
             let favourite = await index.student.checkFavourite(id,req.session.user.emailId);
             if(favourite){
-                return res.render('./favourite_property_page', {title: "", data: data, emailId : req.session.user.emailId, id: id});
+                return res.render('./favourite_property_page', {title: "Favourites", data: data, emailId : req.session.user.emailId, id: id});
             }
             else{
-                return res.render('./property_page', {title: "", data: data, emailId : req.session.user.emailId, id: id});
+                return res.render('./property_page', {title: "Property", data: data, emailId : req.session.user.emailId, id: id});
             }
         }
     }catch(e) {
@@ -104,7 +104,7 @@ router.route('/createProperty')
         res.redirect('/sign-in');
     } 
     else {
-        return res.render('./createProperty', {title: "Add Property"});
+        return res.render('./createProperty', {title: "Add Property",head:"Add Property"});
     }
 })
 .post(upload.array('images'),async (req, res) => {
@@ -149,11 +149,11 @@ router.route('/viewProperty/:id')
             res.redirect('/sign-in');
         } 
         else {
-            let id = req.params.id;
+            let id = xss(req.params.id);
             validate.checkId(id);
             let data = await index.properties.getPropertyById(id);
 
-            return res.render('./owner_property_page', {title: "", data: data});
+            return res.render('./owner_property_page', {title: "Property", data: data});
         }
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});
@@ -167,18 +167,18 @@ router.route('/editProperty/:id')
             res.redirect('/sign-in');
         } 
         else {
-            let id = req.params.id;
+            let id = xss(req.params.id);
             validate.checkId(id);
             let data = await index.properties.getPropertyById(id);
 
-            return res.render('./owner_property_edit', {title: "Property", data: data});
+            return res.render('./owner_property_edit', {title: "EditProperty",head:"Edit Property", data: data});
         }
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});
     }
 })
 .post(upload.array('images'),async (req, res) => {
-    let id = req.params.id;
+    let id = xss(req.params.id);
     try {
         id = validate.checkId(id);
         let imageBuffer=[];
@@ -206,7 +206,7 @@ router.route('/editProperty/:id')
         validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
         await index.owner.editProp(id,imageBuffer,address,description,laundry,rent,listedBy,emailId,area,bed,bath);
         let data = await index.properties.getPropertyById(id);
-        res.render('./owner_property_edit', {title: "Property", data: data, msg: "Update successful"});
+        res.render('./owner_property_edit', {title: "EditProperty",head:"Edit Property", data: data, msg: "Update successful"});
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});
     }
@@ -214,7 +214,7 @@ router.route('/editProperty/:id')
 
 router.route('/deleteProperty/:id')
 .get(async (req, res) => {
-    let id = req.params.id;
+    let id = xss(req.params.id);
     try {
         if (!req.session.user) {
             res.redirect('/sign-in');
@@ -231,7 +231,7 @@ router.route('/deleteProperty/:id')
 
 router.route('/deleteImage/:id')
 .get(async (req, res) => {
-    let id = req.params.id;
+    let id = xss(req.params.id);
     try {
         if (!req.session.user) {
             res.redirect('/sign-in');

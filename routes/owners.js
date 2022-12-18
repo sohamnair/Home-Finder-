@@ -12,8 +12,9 @@ router.route('/')
     } 
     else {
         let emailId = req.session.user.emailId;
+        validate.validateEmail(emailId);
         let data = await index.owner.getOwnerByEmail(emailId); 
-        return res.render('./owner_profile_page', {title: "Profile", data: data, msg: ""});
+        return res.render('./owner_profile_page', {title: "Profile",head:"Profile", data: data, msg: ""});
     }
 })
 .post(async (req, res) => {
@@ -40,10 +41,10 @@ router.route('/')
         
         req.session.user = {emailId: emailId, userType: 'owner', firstName:firstName}; 
         
-        return res.render('./owner_profile_page', {title: "Profile", data: data, msg: "Profile updated successfully"});
+        return res.render('./owner_profile_page', {title: "Profile",head:"Profile", data: data, msg: "Profile updated successfully"});
     }catch(e) {
-        let data = await index.owner.getOwnerByEmail(req.body.emailIdInput);
-        res.status(404).render('./owner_profile_page', {title: "Profile", data: data, msg: "Profile update failed", error: e})
+        let data = await index.owner.getOwnerByEmail(xss(req.body.emailIdInput));
+        res.status(404).render('./owner_profile_page', {title: "Profile",head:"Profile", data: data, msg: "Profile update failed", error: e})
     }
 })
 
@@ -54,11 +55,12 @@ router.route('/properties-list')
     } 
     else {
         let emailId = req.session.user.emailId;
+        validate.checkEmail(emailId);
         let response = await index.owner.getOwnerByEmail(emailId); 
         if(!response.properties || response.properties.length == 0) return res.render('./owner_properties_empty_list_page', {title: "No properties found"});
         else {
             let data = await index.properties.getAllPropertiesByUser(response.properties);
-            return res.render('./owner_properties_list_page', {title: `Hello ${req.session.user.firstName}, here are your properties`, data: data});
+            return res.render('./owner_properties_list_page', {title:"Properties",head: `Hello ${req.session.user.firstName}, here are your properties`, data: data});
         }
     }
 })
