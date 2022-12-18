@@ -12,7 +12,7 @@ router.route('/')
     else {
         let emailId = req.session.user.emailId;
         let data = await index.student.getStudentByEmail(emailId); 
-        return res.render('./student_profile_page', {title: "Profile", data: data});
+        return res.render('./student_profile_page', {title: "Profile",head:"Profile", data: data});
     }
 })
 .post(async (req, res) => {
@@ -42,10 +42,10 @@ router.route('/')
         
         req.session.user = {emailId: emailId, userType: 'student', firstName:firstName};
         //let data = await index.student.getStudentByEmail(emailId); 
-        return res.render('./student_profile_page', {title: "Profile", data: data, msg: "Profile updated successfully"});
+        return res.render('./student_profile_page', {title: "Profile",head:"Profile", data: data, msg: "Profile updated successfully"});
     }catch(e) {
         let data = await index.student.getStudentByEmail(req.body.emailIdInput); 
-        res.status(404).render('./student_profile_page', {title: "Profile", data: data, msg: "Profile updated failed", error: e})
+        res.status(404).render('./student_profile_page', {title: "Profile",head:"Profile", data: data, msg: "Profile updated failed", error: e})
 
     }
 })
@@ -61,11 +61,11 @@ router.route('/favourites-list')
         //console.log(response.favourites);
 
         if(!response.favourites || response.favourites.length == 0) {
-            return res.render('./student_properties_empty_list_page', {title: "No favourites found"});
+            return res.render('./student_properties_empty_list_page', {title: "No favourites found",head:"No favourites found"});
         }
         else {
             let data = await index.properties.getAllPropertiesByUser(response.favourites);
-            return res.render('./student_favourites_list_page', {title: "Favourites", data: data});
+            return res.render('./student_favourites_list_page', {title: "Favourites",head:"Favourites", data: data});
         }
     }
 });
@@ -85,11 +85,11 @@ router.post('/favourites-list/:id',
         try{
             //console.log(req.session.user.emailId);
             await index.student.addFavouriteProperty(req.session.user.emailId, req.params.id);
-            console.log('Added to favs!');
+            // console.log('Added to favs!');
             return res.redirect(`/properties/property/${req.params.id}`);
 
         } catch(e) {
-            console.log('not added to favs');
+            // console.log('not added to favs');
             return res.status(404).render('./error_page', {title: "Error", error: e});
 
         }

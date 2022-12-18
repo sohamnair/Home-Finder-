@@ -342,10 +342,10 @@ const searchProp = async (search) => {
         if (typeof search !== 'string') throw new TypeError('search must be a string');
 
         let prop = search.toLowerCase();
-        var regex = new RegExp([".*", prop, ".*"].join(""), "i");
+        let num = Number(prop.replace(/[a-zA-Z ]/g,""));
+        let regex = new RegExp([".*", prop, ".*"].join(""), "i");
         const propertyCollection = await properties();
-        const searchPropresults = await propertyCollection.find({ $or: [{ "address": regex }, { "description": regex }, { "laundry": regex },{ "dateListed": regex }, {"rent": regex},{ "listedBy": regex },{ "emailId": regex }, { "bed": regex }, { "bath": regex }, {"distance": regex}] }).toArray();
-
+        const searchPropresults = await propertyCollection.find({ $or: [{ "address": regex }, { "description": regex }, { "laundry": regex },{ "dateListed": regex }, {"rent":{$eq: num}},{ "listedBy": regex },{ "emailId": regex },{"area":{$eq: num}}, { "bed": {$eq: num} }, { "bath": {$eq: num} }, {"distance": {$eq: num}}] }).toArray();
         return searchPropresults;
     } catch (err) {
         throw err;

@@ -24,7 +24,7 @@ router.route('/')
 router.route('/sign-in')
 .get(async (req, res) => {
     if (!req.session.user) {
-        return res.render('./sign-in_page', {title: "HomeFinder"});
+        return res.render('./sign-in_page', {title: "HomeFinder",head:"HomeFinder"});
     } 
     else {
         if(req.session.user.userType=='student'){
@@ -66,7 +66,7 @@ router.route('/sign-in')
 router.route('/sign-up')
 .get(async (req, res) => {
     if (!req.session.user) {
-        return res.render('./sign-up_page', {title: "HomeFinder"});
+        return res.render('./sign-up_page', {title: "HomeFinder",head:"HomeFinder"});
     } 
     else {
         if(req.session.user.userType=='student'){
@@ -104,7 +104,7 @@ router.route('/sign-out')
 .get(async (req, res) => {
     req.session.destroy();
     res.clearCookie('AuthCookie');
-    return res.render('./logout_page', {title: "Logout Successful"});
+    return res.render('./logout_page', {title: "Logout Successful",head:"Logout Successful"});
 })
 
 
