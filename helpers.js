@@ -129,7 +129,7 @@ function validateProperty(address,description,laundry,rent,listedBy,email,area,b
     if(bath<=0 || bath>10){
         throw "Error : bath out of bounds";
     }
-    if(!((/^[0-9]{1,6}[a-zA-Z, ]+[0-9]*[a-zA-Z, ]*$/).test(address))){
+    if(!((/^[0-9]{1,6}[a-zA-Z, \.]+[0-9]*[a-zA-Z, \.]*$/).test(address))){
         throw "Error : Invalid address";
     }
     if(!((/^[a-zA-Z0-9 ,\.]+$/).test(description))){
