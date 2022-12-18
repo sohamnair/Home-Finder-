@@ -32,6 +32,15 @@ const createProperty = async (images,address, description, laundry, rent, listed
             url: result.secure_url
         })
     };
+
+    const ownerCollection = await owners();
+    const userOwner = await ownerCollection.findOne({
+      emailId: emailId
+    });
+
+    if(!userOwner||userOwner==null){
+        throw "Error : Owner Not Found";
+    }
     
     address=address.trim()
     description=description.trim()
@@ -121,7 +130,6 @@ const createProperty = async (images,address, description, laundry, rent, listed
 
     //add property to owner's property array
 
-    const ownerCollection = await owners();
     const updatedInfo = await ownerCollection.updateOne(
         {emailId: emailId},
         {$addToSet: {properties:newId}}

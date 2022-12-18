@@ -171,7 +171,7 @@ router.route('/editProperty/:id')
             validate.checkId(id);
             let data = await index.properties.getPropertyById(id);
 
-            return res.render('./owner_property_edit', {title: "Property",head:data.address, data: data});
+            return res.render('./owner_property_edit', {title: "EditProperty",head:"Edit Property", data: data});
         }
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});
@@ -206,7 +206,7 @@ router.route('/editProperty/:id')
         validate.validateProperty(address,description,laundry,rent,listedBy,emailId,area,bed,bath);
         await index.owner.editProp(id,imageBuffer,address,description,laundry,rent,listedBy,emailId,area,bed,bath);
         let data = await index.properties.getPropertyById(id);
-        res.render('./owner_property_edit', {title: "Property",head:"Property", data: data, msg: "Update successful"});
+        res.render('./owner_property_edit', {title: "EditProperty",head:"Edit Property", data: data, msg: "Update successful"});
     }catch(e) {
         return res.status(404).render('./error_page', {title: "Error", error: e});
     }

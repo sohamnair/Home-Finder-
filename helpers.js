@@ -28,11 +28,11 @@ function validateRegistration(email,password,firstName,lastName,contact,gender,c
     if(!((/^(M|F)$/).test(gender.trim()))){
         throw "only letters in gender";
     }
-    if(!((/^[a-zA-Z ]{4,}$/).test(city.trim()))){
-        throw "only letters in city, min four characters";
+    if(!((/^[a-zA-Z ]{4,}[, \.a-zA-z]*$/).test(city.trim()))){
+        throw "only letters, spaces, comma in city, min four characters";
     }
-    if(!((/^[a-zA-Z ]{2,}[, \.a-zA-z]*$/).test(state.trim()))){
-        throw "only letters, spaces, comma and dot in state, min two characters";
+    if(!((/^[a-zA-Z]{2,2}$/).test(state.trim()))){
+        throw "state to be abbreviated in two charcaters, letters only";
     }
     if(!((/^[0-9][0-9]$/).test(age.trim()))){
         throw "only numbers in age, two characters";
@@ -195,11 +195,11 @@ function validateUpdate(email,firstName,lastName,contact,gender,city,state,age) 
     if(!((/^(M|F)$/).test(gender.trim()))){
         throw "only letters in gender";
     }
-    if(!((/^[a-zA-Z]{4,}$/).test(city.trim()))){
-        throw "only letters in city, min four characters";
+    if(!((/^[a-zA-Z ]{4,}[, \.a-zA-z]*$/).test(city.trim()))){
+        throw "only letters, spaces, comma in city, min four characters";
     }
-    if(!((/^[a-zA-Z]{2,}$/).test(state.trim()))){
-        throw "only letters in state, min two characters";
+    if(!((/^[a-zA-Z]{2,2}$/).test(state.trim()))){
+        throw "state to be abbreviated in two charcaters, letters only";
     }
     if(!((/^[0-9][0-9]$/).test(age.trim()))){
         throw "only numbers in age, two characters";
