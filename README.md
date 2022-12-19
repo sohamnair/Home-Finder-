@@ -4,10 +4,10 @@
 
 Team Members:
 ● Pratiksha Naik
-● Jahnavi Bevara
 ● Soham Nair
 ● Sanjan Vadi
 ● Maunish Lankapati
+● Jahnavi Bevara
 
 About the website: This website is developed keeping the Stevens international students in mind. As we have a first hand experience about the problems we faced while searching for a home so keeping that in mind we have developed the feature list accordingly. This website will give the international students a platform to search houses most close to the university. The home owner will list the house with features like distance from Stevens, price, address, etc. The end user(Stevens students) will go through the list by applying several filters like distance(low to high), price(low to high), etc.
 
@@ -21,12 +21,10 @@ Core Features:
 8. Search bar allows user to search by keywords.
 9. Comment section allows students and owners to interact with eachother.
 
-Extra Features:
-1. Shows the houses on the map.
-2. Implement chatting feature between the landlord and the user.
-3. Send a reset password email.
-4. Send welcome aboard email.
-5. Filter-4(Sort by suggestion): Allows users to sort the houses as per travel time less than 40 mins and price less than $2500
-
-
+App Usage:
+1. First run: npm install then run: npm seed.js
+2. Sign-Up/Sign-In either as an owner or as a student. 
+3. If as an owner start creating properties, and start commenting and editing by clicking on them.
+4. If as a student start viewing the properties, and add them to favourites or comment by clicking on them. 
+5. As a student you can sort based on price and distance. Also you can filter based on bed and bath. 
 
