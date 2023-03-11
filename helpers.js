@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb");
 
 function validateRegistration(email,password,firstName,lastName,contact,gender,city,state,age) {
-    if(!email || !password||!firstName){
+    if(!email || !password || !firstName){
       throw "Input not provided";
     }
     if(typeof email!=='string' || typeof password!=='string' || typeof firstName!=='string'|| typeof lastName!=='string'|| typeof contact!=='string'|| typeof gender!=='string'|| typeof city!=='string'|| typeof state!=='string'|| typeof age!=='string'){
