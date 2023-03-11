@@ -3,11 +3,10 @@
 *HomeFinder*
 
 Team Members:
-● Pratiksha Naik
 ● Soham Nair
+● Pratiksha Naik
 ● Sanjan Vadi
 ● Maunish Lankapati
-● Jahnavi Bevara
 
 About the website: This website is developed keeping the Stevens Institute of Technology's international students in mind. As we have a first hand experience about the problems we faced while searching for a home so keeping that in mind we have developed the feature list accordingly. This website will give the international students a platform to search houses most close to the university. The home owner will list the house with features like location, price, address, etc. The end user(Stevens students) will go through the list by applying several filters like distance(low to high), price(low to high), etc.
 
